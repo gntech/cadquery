@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CadQuery Documentation &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="#"/>
+        <link rel="next" title="Introduction" href="intro.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>CadQuery Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cadquery-documentation">
+<h1>CadQuery Documentation<a class="headerlink" href="#cadquery-documentation" title="Permalink to this headline">¶</a></h1>
+<p>CadQuery is an intuitive, easy-to-use python library for building parametric 3D CAD models.  It has several goals:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Build models with scripts that are as close as possible to how you&#8217;d describe the object to a human,
+using a standard, already established programming language</li>
+<li>Create parametric models that can be very easily customized by end users</li>
+<li>Output high quality CAD formats like STEP and AMF in addition to traditional STL</li>
+<li>Provide a non-proprietary, plain text model format that can be edited and executed with only a web browser</li>
+</ul>
+</div></blockquote>
+<div class="section" id="see-cadquery-in-action">
+<h2>See CadQuery in Action<a class="headerlink" href="#see-cadquery-in-action" title="Permalink to this headline">¶</a></h2>
+<p>This <a class="reference external" href="https://youtu.be/lxhBNOE7GVs">Getting Started Video</a> will show you what CadQuery can do.</p>
+</div>
+<div class="section" id="quick-links">
+<h2>Quick Links<a class="headerlink" href="#quick-links" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="quickstart.html#quickstart"><span>CadQuery QuickStart</span></a></li>
+<li><a class="reference external" href="_static/cadquery_cheatsheet.html">CadQuery CheatSheet</a></li>
+<li><a class="reference internal" href="apireference.html#apireference"><span>CadQuery API Reference</span></a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table Of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#id1">What is CadQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#cadquery-is-a-library-guis-are-separate">CadQuery is a library,  GUIs are separate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#why-cadquery-instead-of-openscad">Why CadQuery instead of OpenSCAD?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#where-does-the-name-cadquery-come-from">Where does the name CadQuery come from?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites-freecad-and-python-2-6-or-2-7">Prerequisites&#8211;FreeCAD and Python 2.6 or 2.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#ubuntu-command-line-installation">Ubuntu Command Line Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-other-platforms">Installation: Other Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#test-your-installation">Test Your Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#adding-a-nicer-gui-via-the-cadquery-freecad-module">Adding a Nicer GUI via the cadquery-freecad-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#zero-step-install">Zero Step Install</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prerequisites-freecad-cadquery-freecad-module-in-freecad">Prerequisites: FreeCAD + cadQuery-freeCAD-module in FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#what-we-ll-accomplish">What we&#8217;ll accomplish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#start-with-a-single-simple-plate">Start With A single, simple Plate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#add-the-holes">Add the Holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#more-holes">More Holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#filleting">Filleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#done">Done!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#want-to-learn-more">Want to learn more?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="designprinciples.html#principle-1-intuitive-construction">Principle 1: Intuitive Construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designprinciples.html#principle-2-capture-design-intent">Principle 2: Capture Design Intent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designprinciples.html#principle-3-plugins-as-first-class-citizens">Principle 3: Plugins as first class citizens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designprinciples.html#principle-4-cad-models-as-source-code-makes-sense">Principle 4: CAD models as source code makes sense</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#d-brep-topology-concepts">3D BREP Topology Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#cq-the-cadquery-object">CQ, the CadQuery Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#workplanes">Workplanes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#d-construction">2D Construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#id1">3D Construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#selectors">Selectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#construction-geometry">Construction Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#the-stack">The Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#chaining">Chaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#the-context-solid">The Context Solid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer.html#iteration">Iteration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#simple-rectangular-plate">Simple Rectangular Plate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#plate-with-hole">Plate with Hole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#an-extruded-prismatic-solid">An extruded prismatic solid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#building-profiles-using-lines-and-arcs">Building Profiles using lines and arcs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#moving-the-current-working-point">Moving The Current working point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#using-point-lists">Using Point Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#polygons">Polygons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#polylines">Polylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#defining-an-edge-with-a-spline">Defining an Edge with a Spline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#mirroring-symmetric-geometry">Mirroring Symmetric Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#mirroring-3d-objects">Mirroring 3D Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#creating-workplanes-on-faces">Creating Workplanes on Faces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#locating-a-workplane-on-a-vertex">Locating a Workplane on a vertex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#offset-workplanes">Offset Workplanes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#rotated-workplanes">Rotated Workplanes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#using-construction-geometry">Using construction Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#shelling-to-create-thin-features">Shelling To Create Thin features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#making-lofts">Making Lofts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#making-counter-bored-and-counter-sunk-holes">Making Counter-bored and counter-sunk holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#rounding-corners-with-fillet">Rounding Corners with Fillet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#a-parametric-bearing-pillow-block">A Parametric Bearing Pillow Block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#splitting-an-object">Splitting an Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#the-classic-occ-bottle">The Classic OCC Bottle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#a-parametric-enclosure">A Parametric Enclosure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#lego-brick">Lego Brick</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#braille-example">Braille Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#panel-with-various-connector-holes">Panel With Various Connector Holes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#d-operations">2-d Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#id1">3-d Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#file-management-and-export">File Management and Export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#iteration-methods">Iteration Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#stack-and-selector-methods">Stack and Selector Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#selectors">Selectors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="selectors.html#filtering-faces">Filtering Faces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="selectors.html#filtering-edges">Filtering Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="selectors.html#filtering-vertices">Filtering Vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="selectors.html#user-defined-directions">User-defined Directions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classreference.html#core-classes">Core Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classreference.html#topological-classes">Topological Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classreference.html#geometry-classes">Geometry Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classreference.html#selector-classes">Selector Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classreference.html#module-cadquery">Class Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cqgi.html#the-script-side">The Script Side</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cqgi.html#the-execution-environment-side">The execution environment side</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cqgi.html#more-about-script-variables">More about script variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cqgi.html#important-cqgi-methods">Important CQGI Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cqgi.html#module-cadquery.cqgi">Complete CQGI api</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#using-freecad-script">Using FreeCAD Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#extending-cadquery-plugins">Extending CadQuery: Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-stack">The Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#preserving-the-chain">Preserving the Chain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#helper-methods">Helper Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#coordinate-systems">Coordinate Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#linking-in-your-plugin">Linking in your plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#cadqueryexample-plugins">CadQueryExample Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#plugin-example">Plugin Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#core">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#selectors">Selectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#workplanes">Workplanes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#d-operations">2-d operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#id1">3-d operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#algorithms">Algorithms</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="intro.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

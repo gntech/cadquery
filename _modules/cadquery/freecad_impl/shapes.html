@@ -1,0 +1,1251 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cadquery.freecad_impl.shapes &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="../../../_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>cadquery.freecad_impl.shapes</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cadquery.freecad_impl.shapes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copyright (C) 2011-2015  Parametric Products Intellectual Holdings, LLC</span>
+
+<span class="sd">    This file is part of CadQuery.</span>
+
+<span class="sd">    CadQuery is free software; you can redistribute it and/or</span>
+<span class="sd">    modify it under the terms of the GNU Lesser General Public</span>
+<span class="sd">    License as published by the Free Software Foundation; either</span>
+<span class="sd">    version 2.1 of the License, or (at your option) any later version.</span>
+
+<span class="sd">    CadQuery is distributed in the hope that it will be useful,</span>
+<span class="sd">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="sd">    Lesser General Public License for more details.</span>
+
+<span class="sd">    You should have received a copy of the GNU Lesser General Public</span>
+<span class="sd">    License along with this library; If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">    Wrapper Classes for FreeCAD</span>
+<span class="sd">    These classes provide a stable interface for 3d objects,</span>
+<span class="sd">    independent of the FreeCAD interface.</span>
+
+<span class="sd">    Future work might include use of pythonOCC, OCC, or even</span>
+<span class="sd">    another CAD kernel directly, so this interface layer is quite important.</span>
+
+<span class="sd">    Funny, in java this is one of those few areas where i&#39;d actually spend the time</span>
+<span class="sd">    to make an interface and an implementation, but for new these are just rolled together</span>
+
+<span class="sd">    This interface layer provides three distinct values:</span>
+
+<span class="sd">        1. It allows us to avoid changing key api points if we change underlying implementations.</span>
+<span class="sd">           It would be a disaster if script and plugin authors had to change models because we</span>
+<span class="sd">           changed implementations</span>
+
+<span class="sd">        2. Allow better documentation.  One of the reasons FreeCAD is no more popular is because</span>
+<span class="sd">           its docs are terrible.  This allows us to provide good documentation via docstrings</span>
+<span class="sd">           for each wrapper</span>
+
+<span class="sd">        3. Work around bugs. there are a quite a feb bugs in free this layer allows fixing them</span>
+
+<span class="sd">        4. allows for enhanced functionality.  Many objects are missing features we need. For example</span>
+<span class="sd">           we need a &#39;forConstruction&#39; flag on the Wire object.  this allows adding those kinds of things</span>
+
+<span class="sd">        5. allow changing interfaces when we&#39;d like.  there are  few cases where the FreeCAD api is not</span>
+<span class="sd">           very user friendly: we like to change those when necessary. As an example, in the FreeCAD api,</span>
+<span class="sd">           all factory methods are on the &#39;Part&#39; object, but it is very useful to know what kind of</span>
+<span class="sd">           object each one returns, so these are better grouped by the type of object they return.</span>
+<span class="sd">           (who would know that Part.makeCircle() returns an Edge, but Part.makePolygon() returns a Wire ?</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">cadquery</span> <span class="kn">import</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">BoundBox</span>
+<span class="kn">import</span> <span class="nn">FreeCAD</span>
+<span class="kn">import</span> <span class="nn">Part</span> <span class="kn">as</span> <span class="nn">FreeCADPart</span>
+
+
+<div class="viewcode-block" id="Shape"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape">[docs]</a><span class="k">class</span> <span class="nc">Shape</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents a shape in the system.</span>
+<span class="sd">        Wrappers the FreeCAD api</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forConstruction</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Shape.cast"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.cast">[docs]</a>    <span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">forConstruction</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="s2">&quot;Returns the right type of wrapper, given a FreeCAD object&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">ShapeType</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># TODO: there is a clever way to do this i&#39;m sure with a lookup</span>
+        <span class="c1"># but it is not a perfect mapping, because we are trying to hide</span>
+        <span class="c1"># a bit of the complexity of Compounds in FreeCAD.</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Vertex&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Vertex</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Edge&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Wire&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Face&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Face</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Shell&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Shell</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Solid&#39;</span><span class="p">:</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">Solid</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">&#39;Compound&#39;</span><span class="p">:</span>
+            <span class="c1">#compound of solids, lets return a solid instead</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">Solid</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">Solid</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">Wires</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">Compound</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cast:unknown shape type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="n">tr</span><span class="o">.</span><span class="n">forConstruction</span> <span class="o">=</span> <span class="n">forConstruction</span>
+        <span class="k">return</span> <span class="n">tr</span></div>
+
+    <span class="c1"># TODO: all these should move into the exporters folder.</span>
+    <span class="c1"># we dont need a bunch of exporting code stored in here!</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">exportStl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportStl</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">exportStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">exportShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">fileFormat</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fileFormat</span> <span class="o">==</span> <span class="n">ExportFormats</span><span class="o">.</span><span class="n">STL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportStl</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fileFormat</span> <span class="o">==</span> <span class="n">ExportFormats</span><span class="o">.</span><span class="n">BREP</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportBrep</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fileFormat</span> <span class="o">==</span> <span class="n">ExportFormats</span><span class="o">.</span><span class="n">STEP</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fileFormat</span> <span class="o">==</span> <span class="n">ExportFormats</span><span class="o">.</span><span class="n">AMF</span><span class="p">:</span>
+            <span class="c1"># not built into FreeCAD</span>
+            <span class="c1">#TODO: user selected tolerance</span>
+            <span class="n">tess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">aw</span> <span class="o">=</span> <span class="n">amfUtils</span><span class="o">.</span><span class="n">AMFWriter</span><span class="p">(</span><span class="n">tess</span><span class="p">)</span>
+            <span class="n">aw</span><span class="o">.</span><span class="n">writeAmf</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fileFormat</span> <span class="o">==</span> <span class="n">ExportFormats</span><span class="o">.</span><span class="n">IGES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">exportIges</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown export format: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">format</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Shape.geomType"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.geomType">[docs]</a>    <span class="k">def</span> <span class="nf">geomType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Gets the underlying geometry type</span>
+<span class="sd">            :return: a string according to the geometry type.</span>
+
+<span class="sd">            Implementations can return any values desired, but the</span>
+<span class="sd">            values the user uses in type filters should correspond to these.</span>
+
+<span class="sd">            As an example, if a user does::</span>
+
+<span class="sd">                CQ(object).faces(&quot;%mytype&quot;)</span>
+
+<span class="sd">            The expectation is that the geomType attribute will return &#39;mytype&#39;</span>
+
+<span class="sd">            The return values depend on the type of the shape:</span>
+
+<span class="sd">            Vertex:  always &#39;Vertex&#39;</span>
+<span class="sd">            Edge:   LINE, ARC, CIRCLE, SPLINE</span>
+<span class="sd">            Face:   PLANE, SPHERE, CONE</span>
+<span class="sd">            Solid:  &#39;Solid&#39;</span>
+<span class="sd">            Shell:  &#39;Shell&#39;</span>
+<span class="sd">            Compound: &#39;Compound&#39;</span>
+<span class="sd">            Wire:   &#39;Wire&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ShapeType</span></div>
+
+<div class="viewcode-block" id="Shape.isType"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.isType">[docs]</a>    <span class="k">def</span> <span class="nf">isType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">strType</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns True if the shape is the specified type, false otherwise</span>
+
+<span class="sd">            contrast with ShapeType, which will raise an exception</span>
+<span class="sd">            if the provide object is not a shape at all</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;ShapeType&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">ShapeType</span><span class="p">()</span> <span class="o">==</span> <span class="n">strType</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></div>
+
+    <span class="k">def</span> <span class="nf">hashCode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">hashCode</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">isNull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">isNull</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">isSame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">isSame</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">isEqual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">isEqual</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">BoundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BoundBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">BoundBox</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirrorPlane</span><span class="o">=</span><span class="s2">&quot;XY&quot;</span><span class="p">,</span> <span class="n">basePointVector</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">mirrorPlane</span> <span class="o">==</span> <span class="s2">&quot;XY&quot;</span> <span class="ow">or</span> <span class="n">mirrorPlane</span><span class="o">==</span> <span class="s2">&quot;YX&quot;</span><span class="p">:</span>
+            <span class="n">mirrorPlaneNormalVector</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mirrorPlane</span> <span class="o">==</span> <span class="s2">&quot;XZ&quot;</span> <span class="ow">or</span> <span class="n">mirrorPlane</span> <span class="o">==</span> <span class="s2">&quot;ZX&quot;</span><span class="p">:</span>
+            <span class="n">mirrorPlaneNormalVector</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mirrorPlane</span> <span class="o">==</span> <span class="s2">&quot;YZ&quot;</span> <span class="ow">or</span> <span class="n">mirrorPlane</span> <span class="o">==</span> <span class="s2">&quot;ZY&quot;</span><span class="p">:</span>
+            <span class="n">mirrorPlaneNormalVector</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">basePointVector</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">basePointVector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">basePointVector</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">basePointVector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">mirrorPlaneNormalVector</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">Center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># A Part.Shape object doesn&#39;t have the CenterOfMass function, but it&#39;s wrapped Solid(s) does</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Shape</span><span class="p">):</span>
+            <span class="c1"># If there are no Solids, we&#39;re probably dealing with a Face or something similar</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">CenterOfMass</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">CenterOfMass</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CombinedCenter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Solid</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">CenterOfMass</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot find the center of </span><span class="si">%s</span><span class="s2"> object type&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">CenterOfBoundBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Shape</span><span class="p">):</span>
+            <span class="c1"># If there are no Solids, we&#39;re probably dealing with a Face or something similar</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">Center</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">Center</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CombinedCenterOfBoundBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Solid</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">Center</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot find the center(BoundBox&#39;s) of </span><span class="si">%s</span><span class="s2"> object type&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Solids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)))</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Shape.CombinedCenter"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.CombinedCenter">[docs]</a>    <span class="k">def</span> <span class="nf">CombinedCenter</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the center of mass of multiple objects.</span>
+
+<span class="sd">        :param objects: a list of objects with mass</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_mass</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Shape</span><span class="o">.</span><span class="n">computeMass</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">)</span>
+        <span class="n">weighted_centers</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">CenterOfMass</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Shape</span><span class="o">.</span><span class="n">computeMass</span><span class="p">(</span><span class="n">o</span><span class="p">))</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
+
+        <span class="n">sum_wc</span> <span class="o">=</span> <span class="n">weighted_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">wc</span> <span class="ow">in</span> <span class="n">weighted_centers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="p">:</span>
+            <span class="n">sum_wc</span> <span class="o">=</span> <span class="n">sum_wc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">sum_wc</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">total_mass</span><span class="p">))</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Shape.computeMass"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.computeMass">[docs]</a>    <span class="k">def</span> <span class="nf">computeMass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the &#39;mass&#39; of an object. in FreeCAD &lt; 15, all objects had a mass.</span>
+<span class="sd">        in FreeCAD &gt;=15, faces no longer have mass, but instead have area.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">object</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ShapeType</span> <span class="o">==</span> <span class="s1">&#39;Face&#39;</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Area</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Mass</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Shape.CombinedCenterOfBoundBox"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.CombinedCenterOfBoundBox">[docs]</a>    <span class="k">def</span> <span class="nf">CombinedCenterOfBoundBox</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the center of BoundBox of multiple objects.</span>
+
+<span class="sd">        :param objects: a list of objects with mass 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_mass</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+
+        <span class="n">weighted_centers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+            <span class="n">o</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+            <span class="n">weighted_centers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">Center</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="n">sum_wc</span> <span class="o">=</span> <span class="n">weighted_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">wc</span> <span class="ow">in</span> <span class="n">weighted_centers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="p">:</span>
+            <span class="n">sum_wc</span> <span class="o">=</span> <span class="n">sum_wc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">sum_wc</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">total_mass</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">Closed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Closed</span>
+
+    <span class="k">def</span> <span class="nf">ShapeType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ShapeType</span>
+
+    <span class="k">def</span> <span class="nf">Vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Vertex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Edge</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Edges</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Compounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Compound</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Compounds</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Wires</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Wire</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Wires</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Face</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Faces</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Shells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Shell</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Shells</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">Solids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Solid</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Solids</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Shape.Area"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.Area">[docs]</a>    <span class="k">def</span> <span class="nf">Area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the area of a shape, but only if it is a face</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ShapeType</span> <span class="o">==</span> <span class="s1">&#39;Face&#39;</span><span class="p">:</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Area</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape type must be &#39;Face&#39; to calculate the area&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">Length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Length</span>
+
+<div class="viewcode-block" id="Shape.rotate"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startVector</span><span class="p">,</span> <span class="n">endVector</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotates a shape around an axis</span>
+<span class="sd">        :param startVector: start point of rotation axis  either a 3-tuple or a Vector</span>
+<span class="sd">        :param endVector:  end point of rotation axis, either a 3-tuple or a Vector</span>
+<span class="sd">        :param angleDegrees:  angle to rotate, in degrees</span>
+<span class="sd">        :return: a copy of the shape, rotated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">startVector</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">startVector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">startVector</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">endVector</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">endVector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">endVector</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">startVector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">endVector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Shape.transformShape"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.transformShape">[docs]</a>    <span class="k">def</span> <span class="nf">transformShape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tMatrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            tMatrix is a matrix object.</span>
+<span class="sd">            returns a copy of the ojbect, transformed by the provided matrix,</span>
+<span class="sd">            with all objects keeping their type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">transformShape</span><span class="p">(</span><span class="n">tMatrix</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">forConstruction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forConstruction</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="Shape.transformGeometry"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shape.transformGeometry">[docs]</a>    <span class="k">def</span> <span class="nf">transformGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tMatrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            tMatrix is a matrix object.</span>
+
+<span class="sd">            returns a copy of the object, but with geometry transformed insetad of just</span>
+<span class="sd">            rotated.</span>
+
+<span class="sd">            WARNING: transformGeometry will sometimes convert lines and circles to splines,</span>
+<span class="sd">            but it also has the ability to handle skew and stretching transformations.</span>
+
+<span class="sd">            If your transformation is only translation and rotation, it is safer to use transformShape,</span>
+<span class="sd">            which doesnt change the underlying type of the geometry, but cannot handle skew transformations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">transformGeometry</span><span class="p">(</span><span class="n">tMatrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">hashCode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Vertex"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vertex">[docs]</a><span class="k">class</span> <span class="nc">Vertex</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Single Point in Space</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">forConstruction</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create a vertex from a FreeCAD Vertex</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forConstruction</span> <span class="o">=</span> <span class="n">forConstruction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">Y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">Z</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">toTuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Vertex.Center"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vertex.Center">[docs]</a>    <span class="k">def</span> <span class="nf">Center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The center of a vertex is itself!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Point</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A trimmed curve that represents the border of a face</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            An Edge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="c1"># self.startPoint = None</span>
+        <span class="c1"># self.endPoint = None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">edgetypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">ArcOfCircle</span><span class="p">:</span> <span class="s1">&#39;ARC&#39;</span><span class="p">,</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Circle</span><span class="p">:</span> <span class="s1">&#39;CIRCLE&#39;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="p">,</span><span class="s2">&quot;Line&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edgetypes</span><span class="p">[</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Line</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;LINE&#39;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="p">,</span><span class="s2">&quot;LineSegment&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edgetypes</span><span class="p">[</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">LineSegment</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;LINE&#39;</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">geomType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgetypes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgetypes</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Unknown Edge Curve Type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Edge.startPoint"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.startPoint">[docs]</a>    <span class="k">def</span> <span class="nf">startPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            :return: a vector representing the start poing of this edge</span>
+
+<span class="sd">            Note, circles may have the start and end points the same</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># work around freecad bug where valueAt is unreliable</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Curve</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ParameterRange</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="Edge.endPoint"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.endPoint">[docs]</a>    <span class="k">def</span> <span class="nf">endPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            :return: a vector representing the end point of this edge.</span>
+
+<span class="sd">            Note, circles may have the start and end points the same</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># warning: easier syntax in freecad of &lt;Edge&gt;.valueAt(&lt;Edge&gt;.ParameterRange[1]) has</span>
+        <span class="c1"># a bug with curves other than arcs, but using the underlying curve directly seems to work</span>
+        <span class="c1"># that&#39;s the solution i&#39;m using below</span>
+        <span class="n">curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Curve</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">ParameterRange</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+<div class="viewcode-block" id="Edge.tangentAt"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.tangentAt">[docs]</a>    <span class="k">def</span> <span class="nf">tangentAt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locationVector</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute tangent vector at the specified location.</span>
+<span class="sd">        :param locationVector: location to use. Use the center point if None</span>
+<span class="sd">        :return: tangent vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">locationVector</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">locationVector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Curve</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">locationVector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tangentAt</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">makeCircle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">dir</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">angle1</span><span class="o">=</span><span class="mf">360.0</span><span class="p">,</span> <span class="n">angle2</span><span class="o">=</span><span class="mi">360</span><span class="p">):</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">pnt</span><span class="p">)</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Edge</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeCircle</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">center</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">normal</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">angle1</span><span class="p">,</span> <span class="n">angle2</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Edge.makeSpline"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.makeSpline">[docs]</a>    <span class="k">def</span> <span class="nf">makeSpline</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfVector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interpolate a spline through the provided points.</span>
+<span class="sd">        :param cls:</span>
+<span class="sd">        :param listOfVector: a list of Vectors that represent the points</span>
+<span class="sd">        :return: an Edge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">listOfVector</span><span class="p">]</span>
+
+        <span class="n">spline</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">BSplineCurve</span><span class="p">()</span>
+        <span class="n">spline</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">vecs</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Edge</span><span class="p">(</span><span class="n">spline</span><span class="o">.</span><span class="n">toShape</span><span class="p">())</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Edge.makeThreePointArc"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.makeThreePointArc">[docs]</a>    <span class="k">def</span> <span class="nf">makeThreePointArc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Makes a three point arc through the provided points</span>
+<span class="sd">        :param cls:</span>
+<span class="sd">        :param v1: start vector</span>
+<span class="sd">        :param v2: middle vector</span>
+<span class="sd">        :param v3: end vector</span>
+<span class="sd">        :return: an edge object through the three points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">arc</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Arc</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">v2</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">v3</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">arc</span><span class="o">.</span><span class="n">toShape</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">e</span>  <span class="c1"># arcane and undocumented, this creates an Edge object</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Edge.makeLine"><a class="viewcode-back" href="../../../classreference.html#cadquery.Edge.makeLine">[docs]</a>    <span class="k">def</span> <span class="nf">makeLine</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create a line between two points</span>
+<span class="sd">            :param v1: Vector that represents the first point</span>
+<span class="sd">            :param v2: Vector that represents the second point</span>
+<span class="sd">            :return: A linear edge between the two provided points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Edge</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeLine</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">toTuple</span><span class="p">(),</span> <span class="n">v2</span><span class="o">.</span><span class="n">toTuple</span><span class="p">()))</span></div></div>
+
+
+<div class="viewcode-block" id="Wire"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire">[docs]</a><span class="k">class</span> <span class="nc">Wire</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A series of connected, ordered Edges, that typically bounds a Face</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            A Wire</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Wire.combine"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire.combine">[docs]</a>    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfWires</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to combine a list of wires into a new wire.</span>
+<span class="sd">        the wires are returned in a list.</span>
+<span class="sd">        :param cls:</span>
+<span class="sd">        :param listOfWires:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Wire</span><span class="p">([</span><span class="n">w</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">listOfWires</span><span class="p">]))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Wire.assembleEdges"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire.assembleEdges">[docs]</a>    <span class="k">def</span> <span class="nf">assembleEdges</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfEdges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Attempts to build a wire that consists of the edges in the provided list</span>
+<span class="sd">            :param cls:</span>
+<span class="sd">            :param listOfEdges: a list of Edge objects</span>
+<span class="sd">            :return: a wire with the edges assembled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fCEdges</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">listOfEdges</span><span class="p">]</span>
+
+        <span class="n">wa</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Wire</span><span class="p">(</span><span class="n">fCEdges</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">wa</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Wire.makeCircle"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire.makeCircle">[docs]</a>    <span class="k">def</span> <span class="nf">makeCircle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">normal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Makes a Circle centered at the provided point, having normal in the provided direction</span>
+<span class="sd">            :param radius: floating point radius of the circle, must be &gt; 0</span>
+<span class="sd">            :param center: vector representing the center of the circle</span>
+<span class="sd">            :param normal: vector representing the direction of the plane the circle should lie in</span>
+<span class="sd">            :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Wire</span><span class="p">([</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeCircle</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">center</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">normal</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)]))</span>
+        <span class="k">return</span> <span class="n">w</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">makePolygon</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfVertices</span><span class="p">,</span> <span class="n">forConstruction</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="c1"># convert list of tuples into Vectors.</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">Wire</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makePolygon</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listOfVertices</span><span class="p">]))</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">forConstruction</span> <span class="o">=</span> <span class="n">forConstruction</span>
+        <span class="k">return</span> <span class="n">w</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Wire.makeHelix"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire.makeHelix">[docs]</a>    <span class="k">def</span> <span class="nf">makeHelix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lefthand</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">heightstyle</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a helix along +z axis</span>
+<span class="sd">        :param pitch: displacement of 1 turn measured along surface.</span>
+<span class="sd">        :param height: full length of helix surface (measured sraight along surface&#39;s face)</span>
+<span class="sd">        :param radius: starting radius of helix</span>
+<span class="sd">        :param angle: if &gt; 0, conical surface is used instead of a cylindrical. (angle &lt; 0 not supported)</span>
+<span class="sd">        :param lefthand: if True, helix direction is reversed</span>
+<span class="sd">        :param heightstyle: if True, pitch and height are measured parallel to z-axis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FreeCAD doc: https://www.freecadweb.org/wiki/Part_API (search for makeHelix)</span>
+        <span class="k">return</span> <span class="n">Wire</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeHelix</span><span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">lefthand</span><span class="p">,</span> <span class="n">heightstyle</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Wire.clean"><a class="viewcode-back" href="../../../classreference.html#cadquery.Wire.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This method is not implemented yet.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+<div class="viewcode-block" id="Face"><a class="viewcode-back" href="../../../classreference.html#cadquery.Face">[docs]</a><span class="k">class</span> <span class="nc">Face</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a bounded surface that represents part of the boundary of a solid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">facetypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># TODO: bezier,bspline etc</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Plane</span><span class="p">:</span> <span class="s1">&#39;PLANE&#39;</span><span class="p">,</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Sphere</span><span class="p">:</span> <span class="s1">&#39;SPHERE&#39;</span><span class="p">,</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Cone</span><span class="p">:</span> <span class="s1">&#39;CONE&#39;</span>
+        <span class="p">}</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">geomType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">facetypes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">facetypes</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Unknown Face Surface Type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Face.normalAt"><a class="viewcode-back" href="../../../classreference.html#cadquery.Face.normalAt">[docs]</a>    <span class="k">def</span> <span class="nf">normalAt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locationVector</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Computes the normal vector at the desired location on the face.</span>
+
+<span class="sd">            :returns: a  vector representing the direction</span>
+<span class="sd">            :param locationVector: the location to compute the normal at. If none, the center of the face is used.</span>
+<span class="sd">            :type locationVector: a vector that lies on the surface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">locationVector</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">locationVector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span>
+        <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Surface</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">locationVector</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">normalAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">makePlane</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">basePnt</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">dir</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">basePnt</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">basePnt</span><span class="p">)</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Face</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makePlane</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">basePnt</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Face.makeRuledSurface"><a class="viewcode-back" href="../../../classreference.html#cadquery.Face.makeRuledSurface">[docs]</a>    <span class="k">def</span> <span class="nf">makeRuledSurface</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">edgeOrWire1</span><span class="p">,</span> <span class="n">edgeOrWire2</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &#39;makeRuledSurface(Edge|Wire,Edge|Wire) -- Make a ruled surface</span>
+<span class="sd">        Create a ruled surface out of two edges or wires. If wires are used then</span>
+<span class="sd">        these must have the same</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeRuledSurface</span><span class="p">(</span><span class="n">edgeOrWire1</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">edgeOrWire2</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Face.cut"><a class="viewcode-back" href="../../../classreference.html#cadquery.Face.cut">[docs]</a>    <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">faceToCut</span><span class="p">):</span>
+        <span class="s2">&quot;Remove a face from another one&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">faceToCut</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">fuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">faceToJoin</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">fuse</span><span class="p">(</span><span class="n">faceToJoin</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Face.intersect"><a class="viewcode-back" href="../../../classreference.html#cadquery.Face.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">faceToIntersect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        computes the intersection between the face and the supplied one.</span>
+<span class="sd">        The result could be a face or a compound of faces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">common</span><span class="p">(</span><span class="n">faceToIntersect</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="Shell"><a class="viewcode-back" href="../../../classreference.html#cadquery.Shell">[docs]</a><span class="k">class</span> <span class="nc">Shell</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    the outer boundary of a surface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            A Shell</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">makeShell</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfFaces</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shell</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeShell</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">obj</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listOfFaces</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Solid"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid">[docs]</a><span class="k">class</span> <span class="nc">Solid</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a single solid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            A Solid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.isSolid"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.isSolid">[docs]</a>    <span class="k">def</span> <span class="nf">isSolid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns true if the object is a FreeCAD solid, false otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;ShapeType&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">ShapeType</span> <span class="o">==</span> <span class="s1">&#39;Solid&#39;</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">ShapeType</span> <span class="o">==</span> <span class="s1">&#39;Compound&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeBox"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeBox">[docs]</a>    <span class="k">def</span> <span class="nf">makeBox</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">dir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        makeBox(length,width,height,[pnt,dir]) -- Make a box located in pnt with the dimensions (length,width,height)</span>
+<span class="sd">        By default pnt=Vector(0,0,0) and dir=Vector(0,0,1)&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeBox</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeCone"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeCone">[docs]</a>    <span class="k">def</span> <span class="nf">makeCone</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius1</span><span class="p">,</span> <span class="n">radius2</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">dir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">angleDegrees</span><span class="o">=</span><span class="mi">360</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a cone with given radii and height</span>
+<span class="sd">        By default pnt=Vector(0,0,0),</span>
+<span class="sd">        dir=Vector(0,0,1) and angle=360&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeCone</span><span class="p">(</span><span class="n">radius1</span><span class="p">,</span> <span class="n">radius2</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeCylinder"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeCylinder">[docs]</a>    <span class="k">def</span> <span class="nf">makeCylinder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">dir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">angleDegrees</span><span class="o">=</span><span class="mi">360</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        makeCylinder(radius,height,[pnt,dir,angle]) --</span>
+<span class="sd">        Make a cylinder with a given radius and height</span>
+<span class="sd">        By default pnt=Vector(0,0,0),dir=Vector(0,0,1) and angle=360&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeCylinder</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">pnt</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeTorus"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeTorus">[docs]</a>    <span class="k">def</span> <span class="nf">makeTorus</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius1</span><span class="p">,</span> <span class="n">radius2</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">angleDegrees1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">angleDegrees2</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        makeTorus(radius1,radius2,[pnt,dir,angle1,angle2,angle]) --</span>
+<span class="sd">        Make a torus with agiven radii and angles</span>
+<span class="sd">        By default pnt=Vector(0,0,0),dir=Vector(0,0,1),angle1=0</span>
+<span class="sd">        ,angle1=360 and angle=360&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeTorus</span><span class="p">(</span><span class="n">radius1</span><span class="p">,</span> <span class="n">radius2</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">angleDegrees1</span><span class="p">,</span> <span class="n">angleDegrees2</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeLoft"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeLoft">[docs]</a>    <span class="k">def</span> <span class="nf">makeLoft</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfWire</span><span class="p">,</span> <span class="n">ruled</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            makes a loft from a list of wires</span>
+<span class="sd">            The wires will be converted into faces when possible-- it is presumed that nobody ever actually</span>
+<span class="sd">            wants to make an infinitely thin shell for a real FreeCADPart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># the True flag requests building a solid instead of a shell.</span>
+
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeLoft</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listOfWire</span><span class="p">],</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ruled</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeWedge"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeWedge">[docs]</a>    <span class="k">def</span> <span class="nf">makeWedge</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">z2min</span><span class="p">,</span> <span class="n">x2min</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">z2max</span><span class="p">,</span> <span class="n">x2max</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a wedge located in pnt</span>
+<span class="sd">        By default pnt=Vector(0,0,0) and dir=Vector(0,0,1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span>
+            <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeWedge</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">z2min</span><span class="p">,</span> <span class="n">x2min</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">z2max</span><span class="p">,</span> <span class="n">x2max</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.makeSphere"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.makeSphere">[docs]</a>    <span class="k">def</span> <span class="nf">makeSphere</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">pnt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">angleDegrees1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">angleDegrees2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">angleDegrees3</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a sphere with a given radius</span>
+<span class="sd">        By default pnt=Vector(0,0,0), dir=Vector(0,0,1), angle1=0, angle2=90 and angle3=360</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeSphere</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">pnt</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">angleDegrees1</span><span class="p">,</span> <span class="n">angleDegrees2</span><span class="p">,</span> <span class="n">angleDegrees3</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.extrudeLinearWithRotation"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.extrudeLinearWithRotation">[docs]</a>    <span class="k">def</span> <span class="nf">extrudeLinearWithRotation</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outerWire</span><span class="p">,</span> <span class="n">innerWires</span><span class="p">,</span> <span class="n">vecCenter</span><span class="p">,</span> <span class="n">vecNormal</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Creates a &#39;twisted prism&#39; by extruding, while simultaneously rotating around the extrusion vector.</span>
+
+<span class="sd">            Though the signature may appear to be similar enough to extrudeLinear to merit combining them, the</span>
+<span class="sd">            construction methods used here are different enough that they should be separate.</span>
+
+<span class="sd">            At a high level, the steps followed are:</span>
+<span class="sd">            (1) accept a set of wires</span>
+<span class="sd">            (2) create another set of wires like this one, but which are transformed and rotated</span>
+<span class="sd">            (3) create a ruledSurface between the sets of wires</span>
+<span class="sd">            (4) create a shell and compute the resulting object</span>
+
+<span class="sd">            :param outerWire: the outermost wire, a cad.Wire</span>
+<span class="sd">            :param innerWires: a list of inner wires, a list of cad.Wire</span>
+<span class="sd">            :param vecCenter: the center point about which to rotate.  the axis of rotation is defined by</span>
+<span class="sd">                   vecNormal, located at vecCenter. ( a cad.Vector )</span>
+<span class="sd">            :param vecNormal: a vector along which to extrude the wires ( a cad.Vector )</span>
+<span class="sd">            :param angleDegrees: the angle to rotate through while extruding</span>
+<span class="sd">            :return: a cad.Solid object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># from this point down we are dealing with FreeCAD wires not cad.wires</span>
+        <span class="n">startWires</span> <span class="o">=</span> <span class="p">[</span><span class="n">outerWire</span><span class="o">.</span><span class="n">wrapped</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">innerWires</span><span class="p">]</span>
+        <span class="n">endWires</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">vecCenter</span><span class="o">.</span><span class="n">wrapped</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">vecCenter</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vecNormal</span><span class="p">)</span><span class="o">.</span><span class="n">wrapped</span>
+
+        <span class="c1"># make translated and rotated copy of each wire</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">startWires</span><span class="p">:</span>
+            <span class="n">w2</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">w2</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">vecNormal</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+            <span class="n">w2</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">)</span>
+            <span class="n">endWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w2</span><span class="p">)</span>
+
+        <span class="c1"># make a ruled surface for each set of wires</span>
+        <span class="n">sides</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">startWires</span><span class="p">,</span> <span class="n">endWires</span><span class="p">):</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeRuledSurface</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">)</span>
+            <span class="n">sides</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+        <span class="c1">#make faces for the top and bottom</span>
+        <span class="n">startFace</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Face</span><span class="p">(</span><span class="n">startWires</span><span class="p">)</span>
+        <span class="n">endFace</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Face</span><span class="p">(</span><span class="n">endWires</span><span class="p">)</span>
+        <span class="n">startFace</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">endFace</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+        <span class="c1">#collect all the faces from the sides</span>
+        <span class="n">faceList</span> <span class="o">=</span> <span class="p">[</span><span class="n">startFace</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sides</span><span class="p">:</span>
+            <span class="n">faceList</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">Faces</span><span class="p">)</span>
+        <span class="n">faceList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endFace</span><span class="p">)</span>
+
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeShell</span><span class="p">(</span><span class="n">faceList</span><span class="p">)</span>
+        <span class="n">solid</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">makeSolid</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">solid</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.extrudeLinear"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.extrudeLinear">[docs]</a>    <span class="k">def</span> <span class="nf">extrudeLinear</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outerWire</span><span class="p">,</span> <span class="n">innerWires</span><span class="p">,</span> <span class="n">vecNormal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Attempt to extrude the list of wires  into a prismatic solid in the provided direction</span>
+
+<span class="sd">            :param outerWire: the outermost wire</span>
+<span class="sd">            :param innerWires: a list of inner wires</span>
+<span class="sd">            :param vecNormal: a vector along which to extrude the wires</span>
+<span class="sd">            :return: a Solid object</span>
+
+<span class="sd">            The wires must not intersect</span>
+
+<span class="sd">            Extruding wires is very non-trivial.  Nested wires imply very different geometry, and</span>
+<span class="sd">            there are many geometries that are invalid. In general, the following conditions must be met:</span>
+
+<span class="sd">            * all wires must be closed</span>
+<span class="sd">            * there cannot be any intersecting or self-intersecting wires</span>
+<span class="sd">            * wires must be listed from outside in</span>
+<span class="sd">            * more than one levels of nesting is not supported reliably</span>
+
+<span class="sd">            This method will attempt to sort the wires, but there is much work remaining to make this method</span>
+<span class="sd">            reliable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># one would think that fusing faces into a compound and then extruding would work,</span>
+        <span class="c1"># but it doesnt-- the resulting compound appears to look right, ( right number of faces, etc),</span>
+        <span class="c1"># but then cutting it from the main solid fails with BRep_NotDone.</span>
+        <span class="c1">#the work around is to extrude each and then join the resulting solids, which seems to work</span>
+
+        <span class="c1">#FreeCAD allows this in one operation, but others might not</span>
+        <span class="n">freeCADWires</span> <span class="o">=</span> <span class="p">[</span><span class="n">outerWire</span><span class="o">.</span><span class="n">wrapped</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">innerWires</span><span class="p">:</span>
+            <span class="n">freeCADWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Face</span><span class="p">(</span><span class="n">freeCADWires</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">extrude</span><span class="p">(</span><span class="n">vecNormal</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.revolve"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.revolve">[docs]</a>    <span class="k">def</span> <span class="nf">revolve</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outerWire</span><span class="p">,</span> <span class="n">innerWires</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">,</span> <span class="n">axisStart</span><span class="p">,</span> <span class="n">axisEnd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to revolve the list of wires into a solid in the provided direction</span>
+
+<span class="sd">        :param outerWire: the outermost wire</span>
+<span class="sd">        :param innerWires: a list of inner wires</span>
+<span class="sd">        :param angleDegrees: the angle to revolve through.</span>
+<span class="sd">        :type angleDegrees: float, anything less than 360 degrees will leave the shape open</span>
+<span class="sd">        :param axisStart: the start point of the axis of rotation</span>
+<span class="sd">        :type axisStart: tuple, a two tuple</span>
+<span class="sd">        :param axisEnd: the end point of the axis of rotation</span>
+<span class="sd">        :type axisEnd: tuple, a two tuple</span>
+<span class="sd">        :return: a Solid object</span>
+
+<span class="sd">        The wires must not intersect</span>
+
+<span class="sd">        * all wires must be closed</span>
+<span class="sd">        * there cannot be any intersecting or self-intersecting wires</span>
+<span class="sd">        * wires must be listed from outside in</span>
+<span class="sd">        * more than one levels of nesting is not supported reliably</span>
+<span class="sd">        * the wire(s) that you&#39;re revolving cannot be centered</span>
+
+<span class="sd">        This method will attempt to sort the wires, but there is much work remaining to make this method</span>
+<span class="sd">        reliable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">freeCADWires</span> <span class="o">=</span> <span class="p">[</span><span class="n">outerWire</span><span class="o">.</span><span class="n">wrapped</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">innerWires</span><span class="p">:</span>
+            <span class="n">freeCADWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Face</span><span class="p">(</span><span class="n">freeCADWires</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+        <span class="n">rotateCenter</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">axisStart</span><span class="p">)</span>
+        <span class="n">rotateAxis</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">axisEnd</span><span class="p">)</span>
+
+        <span class="c1">#Convert our axis end vector into to something FreeCAD will understand (an axis specification vector)</span>
+        <span class="n">rotateAxis</span> <span class="o">=</span> <span class="n">rotateCenter</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">rotateAxis</span><span class="p">)</span>
+
+        <span class="c1">#FreeCAD wants a rotation center and then an axis to rotate around rather than an axis of rotation</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">revolve</span><span class="p">(</span><span class="n">rotateCenter</span><span class="p">,</span> <span class="n">rotateAxis</span><span class="p">,</span> <span class="n">angleDegrees</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Solid.sweep"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.sweep">[docs]</a>    <span class="k">def</span> <span class="nf">sweep</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">outerWire</span><span class="p">,</span> <span class="n">innerWires</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">makeSolid</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">isFrenet</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to sweep the list of wires  into a prismatic solid along the provided path</span>
+
+<span class="sd">        :param outerWire: the outermost wire</span>
+<span class="sd">        :param innerWires: a list of inner wires</span>
+<span class="sd">        :param path: The wire to sweep the face resulting from the wires over</span>
+<span class="sd">        :return: a Solid object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># FreeCAD allows this in one operation, but others might not</span>
+        <span class="n">freeCADWires</span> <span class="o">=</span> <span class="p">[</span><span class="n">outerWire</span><span class="o">.</span><span class="n">wrapped</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">innerWires</span><span class="p">:</span>
+            <span class="n">freeCADWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="c1"># f = FreeCADPart.Face(freeCADWires)</span>
+        <span class="n">wire</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Wire</span><span class="p">([</span><span class="n">path</span><span class="o">.</span><span class="n">wrapped</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">wire</span><span class="o">.</span><span class="n">makePipeShell</span><span class="p">(</span><span class="n">freeCADWires</span><span class="p">,</span> <span class="n">makeSolid</span><span class="p">,</span> <span class="n">isFrenet</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">tessellate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Solid.intersect"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toIntersect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        computes the intersection between this solid and the supplied one</span>
+<span class="sd">        The result could be a face or a compound of faces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">common</span><span class="p">(</span><span class="n">toIntersect</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Solid.cut"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.cut">[docs]</a>    <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solidToCut</span><span class="p">):</span>
+        <span class="s2">&quot;Remove a solid from another one&quot;</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">solidToCut</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">fuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solidToJoin</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">fuse</span><span class="p">(</span><span class="n">solidToJoin</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Solid.clean"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean faces by removing splitter edges.&quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">removeSplitter</span><span class="p">()</span>
+        <span class="c1"># removeSplitter() returns a generic Shape type, cast to actual type of object</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">cast_to_shape</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Solid.fillet"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.fillet">[docs]</a>    <span class="k">def</span> <span class="nf">fillet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">edgeList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fillets the specified edges of this solid.</span>
+<span class="sd">        :param radius: float &gt; 0, the radius of the fillet</span>
+<span class="sd">        :param edgeList:  a list of Edge objects, which must belong to this solid</span>
+<span class="sd">        :return: Filleted solid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nativeEdges</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edgeList</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">makeFillet</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">nativeEdges</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Solid.chamfer"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.chamfer">[docs]</a>    <span class="k">def</span> <span class="nf">chamfer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">length2</span><span class="p">,</span> <span class="n">edgeList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Chamfers the specified edges of this solid.</span>
+<span class="sd">        :param length: length &gt; 0, the length (length) of the chamfer</span>
+<span class="sd">        :param length2: length2 &gt; 0, optional parameter for asymmetrical chamfer. Should be `None` if not required.</span>
+<span class="sd">        :param edgeList:  a list of Edge objects, which must belong to this solid</span>
+<span class="sd">        :return: Chamfered solid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nativeEdges</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edgeList</span><span class="p">]</span>
+        <span class="c1"># note: we prefer &#39;length&#39; word to &#39;radius&#39; as opposed to FreeCAD&#39;s API</span>
+        <span class="k">if</span> <span class="n">length2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">makeChamfer</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">length2</span><span class="p">,</span> <span class="n">nativeEdges</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">makeChamfer</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">nativeEdges</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Solid.shell"><a class="viewcode-back" href="../../../classreference.html#cadquery.Solid.shell">[docs]</a>    <span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">faceList</span><span class="p">,</span> <span class="n">thickness</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            make a shelled solid of given  by removing the list of faces</span>
+
+<span class="sd">        :param faceList: list of face objects, which must be part of the solid.</span>
+<span class="sd">        :param thickness: floating point thickness. positive shells outwards, negative shells inwards</span>
+<span class="sd">        :param tolerance: modelling tolerance of the method, default=0.0001</span>
+<span class="sd">        :return: a shelled solid</span>
+
+<span class="sd">            **WARNING**  The underlying FreeCAD implementation can very frequently have problems</span>
+<span class="sd">            with shelling complex geometries!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nativeFaces</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">faceList</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">makeThickness</span><span class="p">(</span><span class="n">nativeFaces</span><span class="p">,</span> <span class="n">thickness</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="Compound"><a class="viewcode-back" href="../../../classreference.html#cadquery.Compound">[docs]</a><span class="k">class</span> <span class="nc">Compound</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a collection of disconnected solids</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            An Edge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">obj</span>
+
+         <span class="c1"># Helps identify this solid through the use of an ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">Center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Compound.makeCompound"><a class="viewcode-back" href="../../../classreference.html#cadquery.Compound.makeCompound">[docs]</a>    <span class="k">def</span> <span class="nf">makeCompound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">listOfShapes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a compound out of a list of shapes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">solids</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">wrapped</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">listOfShapes</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Compound</span><span class="p">(</span><span class="n">solids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">fuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toJoin</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">fuse</span><span class="p">(</span><span class="n">toJoin</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">tessellate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">tessellate</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Compound.clean"><a class="viewcode-back" href="../../../classreference.html#cadquery.Compound.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This method is not implemented yet.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

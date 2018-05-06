@@ -1,0 +1,967 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cadquery.freecad_impl.geom &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="../../../_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>cadquery.freecad_impl.geom</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cadquery.freecad_impl.geom</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copyright (C) 2011-2015  Parametric Products Intellectual Holdings, LLC</span>
+
+<span class="sd">    This file is part of CadQuery.</span>
+
+<span class="sd">    CadQuery is free software; you can redistribute it and/or</span>
+<span class="sd">    modify it under the terms of the GNU Lesser General Public</span>
+<span class="sd">    License as published by the Free Software Foundation; either</span>
+<span class="sd">    version 2.1 of the License, or (at your option) any later version.</span>
+
+<span class="sd">    CadQuery is distributed in the hope that it will be useful,</span>
+<span class="sd">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="sd">    Lesser General Public License for more details.</span>
+
+<span class="sd">    You should have received a copy of the GNU Lesser General Public</span>
+<span class="sd">    License along with this library; If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">import</span> <span class="nn">cadquery</span>
+<span class="kn">import</span> <span class="nn">FreeCAD</span>
+<span class="kn">import</span> <span class="nn">Part</span> <span class="kn">as</span> <span class="nn">FreeCADPart</span>
+
+
+<div class="viewcode-block" id="sortWiresByBuildOrder"><a class="viewcode-back" href="../../../classreference.html#cadquery.sortWiresByBuildOrder">[docs]</a><span class="k">def</span> <span class="nf">sortWiresByBuildOrder</span><span class="p">(</span><span class="n">wireList</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;Tries to determine how wires should be combined into faces.</span>
+
+<span class="sd">    Assume:</span>
+<span class="sd">        The wires make up one or more faces, which could have &#39;holes&#39;</span>
+<span class="sd">        Outer wires are listed ahead of inner wires</span>
+<span class="sd">        there are no wires inside wires inside wires</span>
+<span class="sd">        ( IE, islands -- we can deal with that later on )</span>
+<span class="sd">        none of the wires are construction wires</span>
+
+<span class="sd">    Compute:</span>
+<span class="sd">        one or more sets of wires, with the outer wire listed first, and inner</span>
+<span class="sd">        ones</span>
+
+<span class="sd">    Returns, list of lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">remainingWires</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wireList</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">remainingWires</span><span class="p">:</span>
+        <span class="n">outerWire</span> <span class="o">=</span> <span class="n">remainingWires</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="n">outerWire</span><span class="p">]</span>
+        <span class="n">otherWires</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">remainingWires</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">otherWires</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">plane</span><span class="o">.</span><span class="n">isWireInside</span><span class="p">(</span><span class="n">outerWire</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+                <span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+                <span class="n">remainingWires</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Vector"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vector">[docs]</a><span class="k">class</span> <span class="nc">Vector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a 3-dimensional vector</span>
+
+<span class="sd">        **you can provide any of:**</span>
+
+<span class="sd">        * nothing (in which case a zero vector is return)</span>
+<span class="sd">        * a :class:`FreeCAD.Base.Vector` instance to wrap</span>
+<span class="sd">        * a :class:`Vector` (in which case it is copied)</span>
+<span class="sd">        * a 2-tuple of :class:`float`, ``(x, y)`` (z=0)</span>
+<span class="sd">        * a 3-tuple of :class:`float`, ``(x, y, z)``</span>
+<span class="sd">        * 2 :class:`float` values, as ``x``, and ``y``</span>
+<span class="sd">        * 3 :class:`float` values, as ``x``, ``y``, and ``z``</span>
+<span class="sd">        * named coordinates, like ``Vector(x=1, z=2)``</span>
+
+<span class="sd">        .. doctest::</span>
+
+<span class="sd">            &gt;&gt;&gt; from cadquery import Vector</span>
+<span class="sd">            &gt;&gt;&gt; import FreeCAD</span>
+<span class="sd">            &gt;&gt;&gt; Vector()</span>
+<span class="sd">            Vector (0.0, 0.0, 0.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector(FreeCAD.Base.Vector(1,2,3))</span>
+<span class="sd">            Vector (1.0, 2.0, 3.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector(Vector(4,5,6))</span>
+<span class="sd">            Vector (4.0, 5.0, 6.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector((1, 2))</span>
+<span class="sd">            Vector (1.0, 2.0, 0.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector((1, 2, 3))</span>
+<span class="sd">            Vector (1.0, 2.0, 3.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector(4, 5)</span>
+<span class="sd">            Vector (4.0, 5.0, 0.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector(4, 5, 6)</span>
+<span class="sd">            Vector (4.0, 5.0, 6.0)</span>
+<span class="sd">            &gt;&gt;&gt; Vector(x=1, z=2)</span>
+<span class="sd">            Vector (1.0, 0.0, 2.0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">fV</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">):</span>  <span class="c1"># 1, 2, or 3 arguments (no keyword arguments given)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                    <span class="c1"># First argument is a number, pass list through to freecad</span>
+                    <span class="n">fV</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">arg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># only 1 argument given</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">wrapped</span>
+                        <span class="n">fV</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># create copy</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">):</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">arg</span>
+                        <span class="n">fV</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># create copy</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">):</span>
+                            <span class="n">fV</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="s1">&#39;xyz&#39;</span><span class="p">):</span>
+                <span class="k">pass</span>  <span class="c1"># kwargs contains invalid arguments, raise exception</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fV</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span>
+                    <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fV</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Expected 2 or 3 floats, FreeCAD Vector, 2 or 3-tuple, or named lower-case coords. &quot;</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span> <span class="o">=</span> <span class="n">fV</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="nd">@x.setter</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="nd">@y.setter</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">z</span>
+
+    <span class="nd">@z.setter</span>
+    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">Length</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span>
+
+    <span class="k">def</span> <span class="nf">toTuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="c1"># TODO: is it possible to create a dynamic proxy without all this code?</span>
+    <span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Vector.multiply"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vector.multiply">[docs]</a>    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a copy multiplied by the provided scalar&quot;&quot;&quot;</span>
+        <span class="n">tmp_fc_vector</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">tmp_fc_vector</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Vector.normalized"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vector.normalized">[docs]</a>    <span class="k">def</span> <span class="nf">normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a normalized version of this vector&quot;&quot;&quot;</span>
+        <span class="n">tmp_fc_vector</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">)</span>
+        <span class="n">tmp_fc_vector</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">tmp_fc_vector</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Vector.Center"><a class="viewcode-back" href="../../../classreference.html#cadquery.Vector.Center">[docs]</a>    <span class="k">def</span> <span class="nf">Center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the vector itself</span>
+
+<span class="sd">        The center of myself is myself.</span>
+<span class="sd">        Provided so that vectors, vertexes, and other shapes all support a</span>
+<span class="sd">        common interface, when Center() is requested for all objects on the</span>
+<span class="sd">        stack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">getAngle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="n">getAngle</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">distanceToLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Have not needed this yet, but FreeCAD supports it!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">projectToLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Have not needed this yet, but FreeCAD supports it!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">distanceToPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Have not needed this yet, but FreeCAD supports it!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">projectToPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Have not needed this yet, but FreeCAD supports it!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">coord</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">toTuple</span><span class="p">())</span>
+
+    <span class="fm">__nonzero__</span> <span class="o">=</span> <span class="n">__bool__</span>  <span class="c1"># python 2.x compatability</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">scalar</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> division by zero&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">scalar</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">negative</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Length</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="fm">__ne__</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Matrix"><a class="viewcode-back" href="../../../classreference.html#cadquery.Matrix">[docs]</a><span class="k">class</span> <span class="nc">Matrix</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A 3d , 4x4 transformation matrix.</span>
+
+<span class="sd">    Used to move geometry in space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Matrix</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">matrix</span>
+
+    <span class="k">def</span> <span class="nf">rotateX</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">rotateX</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rotateY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">rotateY</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Plane"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane">[docs]</a><span class="k">class</span> <span class="nc">Plane</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A 2D coordinate system in space</span>
+
+<span class="sd">    A 2D coordinate system in space, with the x-y axes on the plane, and a</span>
+<span class="sd">    particular point as the origin.</span>
+
+<span class="sd">    A plane allows the use of 2-d coordinates, which are later converted to</span>
+<span class="sd">    global, 3d coordinates when the operations are complete.</span>
+
+<span class="sd">    Frequently, it is not necessary to create work planes, as they can be</span>
+<span class="sd">    created automatically from faces.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># equality tolerances</span>
+    <span class="n">_eq_tolerance_origin</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="n">_eq_tolerance_dot</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Plane.named"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.named">[docs]</a>    <span class="k">def</span> <span class="nf">named</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stdName</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Create a predefined Plane based on the conventional names.</span>
+
+<span class="sd">        :param stdName: one of (XY|YZ|ZX|XZ|YX|ZY|front|back|left|right|top|bottom)</span>
+<span class="sd">        :type stdName: string</span>
+<span class="sd">        :param origin: the desired origin, specified in global coordinates</span>
+<span class="sd">        :type origin: 3-tuple of the origin of the new plane, in global coorindates.</span>
+
+<span class="sd">        Available named planes are as follows. Direction references refer to</span>
+<span class="sd">        the global directions.</span>
+
+<span class="sd">        =========== ======= ======= ======</span>
+<span class="sd">        Name        xDir    yDir    zDir</span>
+<span class="sd">        =========== ======= ======= ======</span>
+<span class="sd">        XY          +x      +y      +z</span>
+<span class="sd">        YZ          +y      +z      +x</span>
+<span class="sd">        ZX          +z      +x      +y</span>
+<span class="sd">        XZ          +x      +z      -y</span>
+<span class="sd">        YX          +y      +x      -z</span>
+<span class="sd">        ZY          +z      +y      -x</span>
+<span class="sd">        front       +x      +y      +z</span>
+<span class="sd">        back        -x      +y      -z</span>
+<span class="sd">        left        +z      +y      -x</span>
+<span class="sd">        right       -z      +y      +x</span>
+<span class="sd">        top         +x      -z      +y</span>
+<span class="sd">        bottom      +x      +z      -y</span>
+<span class="sd">        =========== ======= ======= ======</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">namedPlanes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1"># origin, xDir, normal</span>
+            <span class="s1">&#39;XY&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="s1">&#39;YZ&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;ZX&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;XZ&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;YX&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="s1">&#39;ZY&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;front&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="s1">&#39;back&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">namedPlanes</span><span class="p">[</span><span class="n">stdName</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Supported names are {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">namedPlanes</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">XY</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;XY&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">YZ</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;YZ&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ZX</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;ZX&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">XZ</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;XZ&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">YX</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;YX&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ZY</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;ZY&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">front</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;front&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">back</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;back&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bottom</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">xDir</span><span class="o">=</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="n">plane</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">named</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">plane</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plane</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">xDir</span><span class="p">,</span> <span class="n">normal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a Plane with an arbitrary orientation</span>
+
+<span class="sd">        TODO: project x and y vectors so they work even if not orthogonal</span>
+<span class="sd">        :param origin: the origin</span>
+<span class="sd">        :type origin: a three-tuple of the origin, in global coordinates</span>
+<span class="sd">        :param xDir: a vector representing the xDirection.</span>
+<span class="sd">        :type xDir: a three-tuple representing a vector, or a FreeCAD Vector</span>
+<span class="sd">        :param normal: the normal direction for the new plane</span>
+<span class="sd">        :type normal: a FreeCAD Vector</span>
+<span class="sd">        :raises: ValueError if the specified xDir is not orthogonal to the provided normal.</span>
+<span class="sd">        :return: a plane in the global space, with the xDirection of the plane in the specified direction.</span>
+
+<span class="sd">        **Non-orthogonal vectors**</span>
+
+<span class="sd">        If the ``xDir`` and ``normal`` vectors are not orthogonal, the ``normal``</span>
+<span class="sd">        (or ``z`` axis) vector direction is preserved, and truely orthogonal</span>
+<span class="sd">        ``x`` and ``y`` axes are calculated with cross products.</span>
+
+<span class="sd">        * ``y = z.cross(x)``, and</span>
+<span class="sd">        * ``x = y.cross(z)``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># z-axis</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">normal</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;normal should be non null&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zDir</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+
+        <span class="c1"># x-axis</span>
+        <span class="n">xDir</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">xDir</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;xDir should be non null&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setPlaneDir</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">invZDir</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">zDir</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">origin</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+
+    <span class="nd">@origin.setter</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calcTransforms</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Plane.setOrigin2d"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.setOrigin2d">[docs]</a>    <span class="k">def</span> <span class="nf">setOrigin2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a new origin in the plane itself</span>
+
+<span class="sd">        Set a new origin in the plane itself. The plane&#39;s orientation and</span>
+<span class="sd">        xDrection are unaffected.</span>
+
+<span class="sd">        :param float x: offset in the x direction</span>
+<span class="sd">        :param float y: offset in the y direction</span>
+<span class="sd">        :return: void</span>
+
+<span class="sd">        The new coordinates are specified in terms of the current 2-d system.</span>
+<span class="sd">        As an example:</span>
+
+<span class="sd">        p = Plane.XY()</span>
+<span class="sd">        p.setOrigin2d(2, 2)</span>
+<span class="sd">        p.setOrigin2d(2, 2)</span>
+
+<span class="sd">        results in a plane with its origin at (x, y) = (4, 4) in global</span>
+<span class="sd">        coordinates. Both operations were relative to local coordinates of the</span>
+<span class="sd">        plane.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toWorldCoords</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Plane.isWireInside"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.isWireInside">[docs]</a>    <span class="k">def</span> <span class="nf">isWireInside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baseWire</span><span class="p">,</span> <span class="n">testWire</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Determine if testWire is inside baseWire</span>
+
+<span class="sd">        Determine if testWire is inside baseWire, after both wires are projected</span>
+<span class="sd">        into the current plane.</span>
+
+<span class="sd">        :param baseWire: a reference wire</span>
+<span class="sd">        :type baseWire: a FreeCAD wire</span>
+<span class="sd">        :param testWire: another wire</span>
+<span class="sd">        :type testWire: a FreeCAD wire</span>
+<span class="sd">        :return: True if testWire is inside baseWire, otherwise False</span>
+
+<span class="sd">        If either wire does not lie in the current plane, it is projected into</span>
+<span class="sd">        the plane first.</span>
+
+<span class="sd">        *WARNING*:  This method is not 100% reliable. It uses bounding box</span>
+<span class="sd">        tests, but needs more work to check for cases when curves are complex.</span>
+
+<span class="sd">        Future Enhancements:</span>
+<span class="sd">            * Discretizing points along each curve to provide a more reliable</span>
+<span class="sd">              test.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: also use a set of points along the wire to test as well.</span>
+        <span class="c1"># TODO: would it be more efficient to create objects in the local</span>
+        <span class="c1">#       coordinate system, and then transform to global</span>
+        <span class="c1">#       coordinates upon extrusion?</span>
+
+        <span class="n">tBaseWire</span> <span class="o">=</span> <span class="n">baseWire</span><span class="o">.</span><span class="n">transformGeometry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fG</span><span class="p">)</span>
+        <span class="n">tTestWire</span> <span class="o">=</span> <span class="n">testWire</span><span class="o">.</span><span class="n">transformGeometry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fG</span><span class="p">)</span>
+
+        <span class="c1"># These bounding boxes will have z=0, since we transformed them into the</span>
+        <span class="c1"># space of the plane.</span>
+        <span class="n">bb</span> <span class="o">=</span> <span class="n">tBaseWire</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">()</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">tTestWire</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">()</span>
+
+        <span class="c1"># findOutsideBox actually inspects both ways, here we only want to</span>
+        <span class="c1"># know if one is inside the other</span>
+        <span class="k">return</span> <span class="n">bb</span> <span class="o">==</span> <span class="n">BoundBox</span><span class="o">.</span><span class="n">findOutsideBox2D</span><span class="p">(</span><span class="n">bb</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Plane.toLocalCoords"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.toLocalCoords">[docs]</a>    <span class="k">def</span> <span class="nf">toLocalCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project the provided coordinates onto this plane</span>
+
+<span class="sd">        :param obj: an object or vector to convert</span>
+<span class="sd">        :type vector: a vector or shape</span>
+<span class="sd">        :return: an object of the same type, but converted to local coordinates</span>
+
+
+<span class="sd">        Most of the time, the z-coordinate returned will be zero, because most</span>
+<span class="sd">        operations based on a plane are all 2-d. Occasionally, though, 3-d</span>
+<span class="sd">        points outside of the current plane are transformed. One such example is</span>
+<span class="sd">        :py:meth:`Workplane.box`, where 3-d corners of a box are transformed to</span>
+<span class="sd">        orient the box in space correctly.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fG</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">cadquery</span><span class="o">.</span><span class="n">Shape</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">transformShape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rG</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Don&#39;t know how to convert type {} to local coordinates&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Plane.toWorldCoords"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.toWorldCoords">[docs]</a>    <span class="k">def</span> <span class="nf">toWorldCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tuplePoint</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert a point in local coordinates to global coordinates</span>
+
+<span class="sd">        :param tuplePoint: point in local coordinates to convert.</span>
+<span class="sd">        :type tuplePoint: a 2 or three tuple of float. The third value is taken to be zero if not supplied.</span>
+<span class="sd">        :return: a Vector in global coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tuplePoint</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">tuplePoint</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuplePoint</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">tuplePoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tuplePoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">tuplePoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rG</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Plane.rotated"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.rotated">[docs]</a>    <span class="k">def</span> <span class="nf">rotated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of this plane, rotated about the specified axes</span>
+
+<span class="sd">        Since the z axis is always normal the plane, rotating around Z will</span>
+<span class="sd">        always produce a plane that is parallel to this one.</span>
+
+<span class="sd">        The origin of the workplane is unaffected by the rotation.</span>
+
+<span class="sd">        Rotations are done in order x, y, z. If you need a different order,</span>
+<span class="sd">        manually chain together multiple rotate() commands.</span>
+
+<span class="sd">        :param rotate: Vector [xDegrees, yDegrees, zDegrees]</span>
+<span class="sd">        :return: a copy of this plane rotated as requested.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rotate</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">rotate</span><span class="p">)</span>
+        <span class="c1"># Convert to radians.</span>
+        <span class="n">rotate</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">)</span>
+
+        <span class="c1"># Compute rotation matrix.</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Matrix</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">rotateX</span><span class="p">(</span><span class="n">rotate</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">rotateY</span><span class="p">(</span><span class="n">rotate</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">rotateZ</span><span class="p">(</span><span class="n">rotate</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># Compute the new plane.</span>
+        <span class="n">newXdir</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+        <span class="n">newZdir</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">wrapped</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span> <span class="n">newXdir</span><span class="p">,</span> <span class="n">newZdir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Plane.rotateShapes"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.rotateShapes">[docs]</a>    <span class="k">def</span> <span class="nf">rotateShapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listOfShapes</span><span class="p">,</span> <span class="n">rotationMatrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rotate the listOfShapes by the supplied rotationMatrix</span>
+
+<span class="sd">        @param listOfShapes is a list of shape objects</span>
+<span class="sd">        @param rotationMatrix is a geom.Matrix object.</span>
+<span class="sd">        returns a list of shape objects rotated according to the rotationMatrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compute rotation matrix (global --&gt; local --&gt; rotate --&gt; global).</span>
+        <span class="c1"># rm = self.plane.fG.multiply(matrix).multiply(self.plane.rG)</span>
+        <span class="c1"># rm = self.computeTransform(rotationMatrix)</span>
+
+        <span class="c1"># There might be a better way, but to do this rotation takes 3 steps:</span>
+        <span class="c1"># - transform geometry to local coordinates</span>
+        <span class="c1"># - then rotate about x</span>
+        <span class="c1"># - then transform back to global coordinates.</span>
+
+        <span class="n">resultWires</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">listOfShapes</span><span class="p">:</span>
+            <span class="n">mirrored</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">transformGeometry</span><span class="p">(</span><span class="n">rotationMatrix</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+            <span class="c1"># If the first vertex of the second wire is not coincident with the</span>
+            <span class="c1"># first or last vertices of the first wire we have to fix the wire</span>
+            <span class="c1"># so that it will mirror correctly.</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">X</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">X</span> <span class="ow">and</span>
+                 <span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span> <span class="ow">and</span>
+                 <span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Z</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">X</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">X</span> <span class="ow">and</span>
+                 <span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span> <span class="ow">and</span>
+                 <span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Z</span> <span class="o">==</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Vertexes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+
+                <span class="n">resultWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mirrored</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Make sure that our mirrored edges meet up and are ordered</span>
+                <span class="c1"># properly.</span>
+                <span class="n">aEdges</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Edges</span>
+                <span class="n">aEdges</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">mirrored</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">Edges</span><span class="p">)</span>
+                <span class="n">comp</span> <span class="o">=</span> <span class="n">FreeCADPart</span><span class="o">.</span><span class="n">Compound</span><span class="p">(</span><span class="n">aEdges</span><span class="p">)</span>
+                <span class="n">mirroredWire</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">connectEdgesToWires</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">Wires</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">resultWires</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cadquery</span><span class="o">.</span><span class="n">Shape</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">mirroredWire</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">resultWires</span></div>
+
+    <span class="k">def</span> <span class="nf">_setPlaneDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xDir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the vectors parallel to the plane, i.e. xDir and yDir&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xDir</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">xDir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yDir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xDir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yDir</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_calcTransforms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes transformation matrices to convert between coordinates</span>
+
+<span class="sd">        Computes transformation matrices to convert between local and global</span>
+<span class="sd">        coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># r is the forward transformation matrix from world to local coordinates</span>
+        <span class="c1"># ok i will be really honest, i cannot understand exactly why this works</span>
+        <span class="c1"># something bout the order of the translation and the rotation.</span>
+        <span class="c1"># the double-inverting is strange, and I don&#39;t understand it.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">Matrix</span><span class="p">()</span>
+
+        <span class="c1"># Forward transform must rotate and adjust for origin.</span>
+        <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">A11</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A12</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A13</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">A21</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A22</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A23</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yDir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yDir</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yDir</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">A31</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A32</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">A33</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="n">invR</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span>
+        <span class="n">invR</span><span class="o">.</span><span class="n">A14</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">invR</span><span class="o">.</span><span class="n">A24</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">invR</span><span class="o">.</span><span class="n">A34</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">z</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rG</span> <span class="o">=</span> <span class="n">invR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fG</span> <span class="o">=</span> <span class="n">invR</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Plane.computeTransform"><a class="viewcode-back" href="../../../classreference.html#cadquery.Plane.computeTransform">[docs]</a>    <span class="k">def</span> <span class="nf">computeTransform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tMatrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the 2-d projection of the supplied matrix&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fG</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">tMatrix</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rG</span><span class="p">))</span></div>
+
+    <span class="c1"># Equality</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">equality_iter</span><span class="p">():</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Plane</span><span class="p">)</span>  <span class="c1"># comparison is with another Plane</span>
+            <span class="c1"># origins are the same</span>
+            <span class="k">yield</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_eq_tolerance_origin</span>
+            <span class="c1"># z-axis vectors are parallel (assumption: both are unit vectors)</span>
+            <span class="k">yield</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zDir</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">zDir</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_eq_tolerance_dot</span>
+            <span class="c1"># x-axis vectors are parallel (assumption: both are unit vectors)</span>
+            <span class="k">yield</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xDir</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">xDir</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_eq_tolerance_dot</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">equality_iter</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BoundBox"><a class="viewcode-back" href="../../../classreference.html#cadquery.BoundBox">[docs]</a><span class="k">class</span> <span class="nc">BoundBox</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A BoundingBox for an object or set of objects. Wraps the FreeCAD one&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">bb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">XMin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">XMax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xlen</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">XLength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">YMin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">YMax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ylen</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">YLength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">ZMin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">ZMax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zlen</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">ZLength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">Center</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DiagonalLength</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">DiagonalLength</span>
+
+<div class="viewcode-block" id="BoundBox.add"><a class="viewcode-back" href="../../../classreference.html#cadquery.BoundBox.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a modified (expanded) bounding box</span>
+
+<span class="sd">        obj can be one of several things:</span>
+<span class="sd">            1. a 3-tuple corresponding to x,y, and z amounts to add</span>
+<span class="sd">            2. a vector, containing the x,y,z values to add</span>
+<span class="sd">            3. another bounding box, where a new box will be created that</span>
+<span class="sd">               encloses both.</span>
+
+<span class="sd">        This bounding box is not changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Base</span><span class="o">.</span><span class="n">BoundBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">fV</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">BoundBox</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BoundBox</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="BoundBox.findOutsideBox2D"><a class="viewcode-back" href="../../../classreference.html#cadquery.BoundBox.findOutsideBox2D">[docs]</a>    <span class="k">def</span> <span class="nf">findOutsideBox2D</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares bounding boxes</span>
+
+<span class="sd">        Compares bounding boxes. Returns none if neither is inside the other.</span>
+<span class="sd">        Returns the outer one if either is outside the other.</span>
+
+<span class="sd">        BoundBox.isInside works in 3d, but this is a 2d bounding box, so it</span>
+<span class="sd">        doesn&#39;t work correctly plus, there was all kinds of rounding error in</span>
+<span class="sd">        the built-in implementation i do not understand.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fc_bb1</span> <span class="o">=</span> <span class="n">b1</span><span class="o">.</span><span class="n">wrapped</span>
+        <span class="n">fc_bb2</span> <span class="o">=</span> <span class="n">b2</span><span class="o">.</span><span class="n">wrapped</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fc_bb1</span><span class="o">.</span><span class="n">XMin</span> <span class="o">&lt;</span> <span class="n">fc_bb2</span><span class="o">.</span><span class="n">XMin</span> <span class="ow">and</span>
+            <span class="n">fc_bb1</span><span class="o">.</span><span class="n">XMax</span> <span class="o">&gt;</span> <span class="n">fc_bb2</span><span class="o">.</span><span class="n">XMax</span> <span class="ow">and</span>
+            <span class="n">fc_bb1</span><span class="o">.</span><span class="n">YMin</span> <span class="o">&lt;</span> <span class="n">fc_bb2</span><span class="o">.</span><span class="n">YMin</span> <span class="ow">and</span>
+            <span class="n">fc_bb1</span><span class="o">.</span><span class="n">YMax</span> <span class="o">&gt;</span> <span class="n">fc_bb2</span><span class="o">.</span><span class="n">YMax</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">b1</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">fc_bb2</span><span class="o">.</span><span class="n">XMin</span> <span class="o">&lt;</span> <span class="n">fc_bb1</span><span class="o">.</span><span class="n">XMin</span> <span class="ow">and</span>
+            <span class="n">fc_bb2</span><span class="o">.</span><span class="n">XMax</span> <span class="o">&gt;</span> <span class="n">fc_bb1</span><span class="o">.</span><span class="n">XMax</span> <span class="ow">and</span>
+            <span class="n">fc_bb2</span><span class="o">.</span><span class="n">YMin</span> <span class="o">&lt;</span> <span class="n">fc_bb1</span><span class="o">.</span><span class="n">YMin</span> <span class="ow">and</span>
+            <span class="n">fc_bb2</span><span class="o">.</span><span class="n">YMax</span> <span class="o">&gt;</span> <span class="n">fc_bb1</span><span class="o">.</span><span class="n">YMax</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">b2</span>
+
+        <span class="k">return</span> <span class="bp">None</span></div>
+
+<div class="viewcode-block" id="BoundBox.isInside"><a class="viewcode-back" href="../../../classreference.html#cadquery.BoundBox.isInside">[docs]</a>    <span class="k">def</span> <span class="nf">isInside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anotherBox</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Is the provided bounding box inside this one?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">isInside</span><span class="p">(</span><span class="n">anotherBox</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

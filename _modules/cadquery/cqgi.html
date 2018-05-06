@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cadquery.cqgi &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="../../_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>cadquery.cqgi</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cadquery.cqgi</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The CadQuery Gateway Interface.</span>
+<span class="sd">Provides classes and tools for executing CadQuery scripts</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">cadquery</span>
+
+<span class="n">CQSCRIPT</span> <span class="o">=</span> <span class="s2">&quot;&lt;cqscript&gt;&quot;</span>
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">script_source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses the script as a model, and returns a model.</span>
+
+<span class="sd">    If you would prefer to access the underlying model without building it,</span>
+<span class="sd">    for example, to inspect its available parameters, construct a CQModel object.</span>
+
+<span class="sd">    :param script_source: the script to run. Must be a valid cadquery script</span>
+<span class="sd">    :return: a CQModel object that defines the script and allows execution</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">CQModel</span><span class="p">(</span><span class="n">script_source</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="CQModel"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.CQModel">[docs]</a><span class="k">class</span> <span class="nc">CQModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a Cadquery Script.</span>
+
+<span class="sd">    After construction, the metadata property contains</span>
+<span class="sd">    a ScriptMetaData object, which describes the model in more detail,</span>
+<span class="sd">    and can be used to retrive the parameters defined by the model.</span>
+
+<span class="sd">    the build method can be used to generate a 3d model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script_source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an object by parsing the supplied python script.</span>
+<span class="sd">        :param script_source: a python script to parse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ScriptMetadata</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ast_tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">script_source</span><span class="p">,</span> <span class="n">CQSCRIPT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script_source</span> <span class="o">=</span> <span class="n">script_source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_find_vars</span><span class="p">()</span>
+
+        <span class="c1"># TODO: pick up other scirpt metadata:</span>
+        <span class="c1"># describe</span>
+        <span class="c1"># pick up validation methods</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_find_descriptions</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_find_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the script, and populate variables that appear to be</span>
+<span class="sd">        overridable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#assumption here: we assume that variable declarations</span>
+        <span class="c1">#are only at the top level of the script. IE, we&#39;ll ignore any</span>
+        <span class="c1">#variable definitions at lower levels of the script</span>
+
+        <span class="c1">#we dont want to use the visit interface because here we excplicitly</span>
+        <span class="c1">#want to walk only the top level of the tree.</span>
+        <span class="n">assignment_finder</span> <span class="o">=</span> <span class="n">ConstantAssignmentFinder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ast_tree</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">):</span>
+                <span class="n">assignment_finder</span><span class="o">.</span><span class="n">visit_Assign</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_find_descriptions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">description_finder</span> <span class="o">=</span> <span class="n">ParameterDescriptionFinder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">description_finder</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ast_tree</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CQModel.validate"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.CQModel.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the supplied parameters are valid.</span>
+<span class="sd">        NOT IMPLEMENTED YET-- raises NotImplementedError</span>
+<span class="sd">        :param params: a dictionary of parameters</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;not yet implemented&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CQModel.build"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.CQModel.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">build_options</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Executes the script, using the optional parameters to override those in the model</span>
+<span class="sd">        :param build_parameters: a dictionary of variables. The variables must be</span>
+<span class="sd">        assignable to the underlying variable type. These variables override default values in the script</span>
+<span class="sd">        :param build_options: build options for how to build the model. Build options include things like</span>
+<span class="sd">        timeouts, tesselation tolerances, etc</span>
+<span class="sd">        :raises: Nothing. If there is an exception, it will be on the exception property of the result.</span>
+<span class="sd">        This is the interface so that we can return other information on the result, such as the build time</span>
+<span class="sd">        :return: a BuildResult object, which includes the status of the result, and either</span>
+<span class="sd">        a resulting shape or an exception</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">build_parameters</span><span class="p">:</span>
+            <span class="n">build_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">BuildResult</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_param_values</span><span class="p">(</span><span class="n">build_parameters</span><span class="p">)</span>
+            <span class="n">collector</span> <span class="o">=</span> <span class="n">ScriptCallback</span><span class="p">()</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">EnvironmentBuilder</span><span class="p">()</span><span class="o">.</span><span class="n">with_real_builtins</span><span class="p">()</span><span class="o">.</span><span class="n">with_cadquery_objects</span><span class="p">()</span> \
+                <span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s2">&quot;show_object&quot;</span><span class="p">,</span> <span class="n">collector</span><span class="o">.</span><span class="n">show_object</span><span class="p">)</span> \
+                <span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">collector</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> \
+                <span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="s2">&quot;describe_parameter&quot;</span><span class="p">,</span><span class="n">collector</span><span class="o">.</span><span class="n">describe_parameter</span><span class="p">)</span> \
+                <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ast_tree</span><span class="p">,</span> <span class="n">CQSCRIPT</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
+            <span class="k">exec</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">set_debug</span><span class="p">(</span><span class="n">collector</span><span class="o">.</span><span class="n">debugObjects</span> <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">set_success_result</span><span class="p">(</span><span class="n">collector</span><span class="o">.</span><span class="n">outputObjects</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="c1">#print &quot;Error Executing Script:&quot;</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">set_failure_result</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+            <span class="c1">#traceback.print_exc()</span>
+            <span class="c1">#print &quot;Full Text of Script:&quot;</span>
+            <span class="c1">#print self.script_source</span>
+
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">buildTime</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">set_param_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">model_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">parameters</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_parameters</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidParameterError</span><span class="p">(</span><span class="s2">&quot;Cannot set value &#39;</span><span class="si">%s</span><span class="s2">&#39;: not a parameter of the model.&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+
+            <span class="n">p</span> <span class="o">=</span> <span class="n">model_parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShapeResult"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ShapeResult">[docs]</a><span class="k">class</span> <span class="nc">ShapeResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An object created by a build, including the user parameters provided</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+<div class="viewcode-block" id="BuildResult"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.BuildResult">[docs]</a><span class="k">class</span> <span class="nc">BuildResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The result of executing a CadQuery script.</span>
+<span class="sd">    The success property contains whether the exeuction was successful.</span>
+
+<span class="sd">    If successful, the results property contains a list of all results,</span>
+<span class="sd">    and the first_result property contains the first result.</span>
+
+<span class="sd">    If unsuccessful, the exception property contains a reference to</span>
+<span class="sd">    the stack trace that occurred.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildTime</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#list of ShapeResult</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debugObjects</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#list of ShapeResult</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_result</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">set_failure_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="n">ex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">set_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debugObjects</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debugObjects</span> <span class="o">=</span> <span class="n">debugObjects</span>
+
+    <span class="k">def</span> <span class="nf">set_success_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">results</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="bp">True</span></div>
+
+
+<div class="viewcode-block" id="ScriptMetadata"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptMetadata">[docs]</a><span class="k">class</span> <span class="nc">ScriptMetadata</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the metadata for a parsed CQ Script.</span>
+<span class="sd">    the parameters property is a dict of InputParameter objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">add_script_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="k">def</span> <span class="nf">add_parameter_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">description</span><span class="p">):</span>
+        <span class="c1">#print &#39;Adding Parameter name=%s, desc=%s&#39; % ( name, description )</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">description</span></div>
+
+
+<span class="k">class</span> <span class="nc">ParameterType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">NumberParameterType</span><span class="p">(</span><span class="n">ParameterType</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">StringParameterType</span><span class="p">(</span><span class="n">ParameterType</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">BooleanParameterType</span><span class="p">(</span><span class="n">ParameterType</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="InputParameter"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.InputParameter">[docs]</a><span class="k">class</span> <span class="nc">InputParameter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a parameter that can be supplied when the model is executed.</span>
+
+<span class="sd">    Name, varType, and default_value are always available, because they are computed</span>
+<span class="sd">    from a variable assignment line of code:</span>
+
+<span class="sd">    The others are only available if the script has used define_parameter() to</span>
+<span class="sd">    provide additional metadata</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">#: the default value for the variable.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1">#: the name of the parameter.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1">#: type of the variable: BooleanParameter, StringParameter, NumericParameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varType</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1">#: help text describing the variable. Only available if the script used describe_parameter()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1">#: valid values for the variable. Only available if the script used describe_parameter()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">ast_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">default_value</span><span class="p">,</span> <span class="n">valid_values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">valid_values</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">valid_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">InputParameter</span><span class="p">()</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">ast_node</span> <span class="o">=</span> <span class="n">ast_node</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">default_value</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">var_name</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">varType</span> <span class="o">=</span> <span class="n">var_type</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">valid_values</span> <span class="o">=</span> <span class="n">valid_values</span>
+        <span class="k">return</span> <span class="n">p</span>
+
+    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">valid_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">new_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_values</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidParameterError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot set value &#39;{0:s}&#39; for parameter &#39;{1:s}&#39;: not a valid value. Valid values are {2:s} &quot;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">new_value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">valid_values</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">varType</span> <span class="o">==</span> <span class="n">NumberParameterType</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Sometimes a value must stay as an int for the script to work properly</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">f</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">f</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidParameterError</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot set value &#39;{0:s}&#39; for parameter &#39;{1:s}&#39;: parameter must be numeric.&quot;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">new_value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">varType</span> <span class="o">==</span> <span class="n">StringParameterType</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">varType</span> <span class="o">==</span> <span class="n">BooleanParameterType</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">new_value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ast</span><span class="p">,</span> <span class="s1">&#39;NameConstant&#39;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ast</span><span class="p">,</span> <span class="s1">&#39;NameConstant&#39;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ast_node</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown Type of var: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">varType</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;InputParameter: {name=</span><span class="si">%s</span><span class="s2">, type=</span><span class="si">%s</span><span class="s2">, defaultValue=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">varType</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ScriptCallback"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptCallback">[docs]</a><span class="k">class</span> <span class="nc">ScriptCallback</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allows a script to communicate with the container</span>
+<span class="sd">    the show_object() method is exposed to CQ scripts, to allow them</span>
+<span class="sd">    to return objects to the execution environment</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputObjects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debugObjects</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="ScriptCallback.show_object"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptCallback.show_object">[docs]</a>    <span class="k">def</span> <span class="nf">show_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span><span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        return an object to the executing environment, with options</span>
+<span class="sd">        :param shape: a cadquery object</span>
+<span class="sd">        :param options: a dictionary of options that will be made available to the executing envrionment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="n">ShapeResult</span><span class="p">()</span>
+        <span class="n">o</span><span class="o">.</span><span class="n">options</span><span class="o">=</span><span class="n">options</span>
+        <span class="n">o</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputObjects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScriptCallback.debug"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptCallback.debug">[docs]</a>    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Debug print/output an object, with optional arguments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">ShapeResult</span><span class="p">()</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debugObjects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScriptCallback.describe_parameter"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptCallback.describe_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">describe_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var_data</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do Nothing-- we parsed the ast ahead of exection to get what we need.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ScriptCallback.add_error"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptCallback.add_error">[docs]</a>    <span class="k">def</span> <span class="nf">add_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">field_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Not implemented yet: allows scripts to indicate that there are problems with inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="nf">has_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputObjects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+
+<div class="viewcode-block" id="InvalidParameterError"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.InvalidParameterError">[docs]</a><span class="k">class</span> <span class="nc">InvalidParameterError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raised when an attempt is made to provide a new parameter value</span>
+<span class="sd">    that cannot be assigned to the model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="NoOutputError"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.NoOutputError">[docs]</a><span class="k">class</span> <span class="nc">NoOutputError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raised when the script does not execute the show_object() method to</span>
+<span class="sd">    return a solid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ScriptExecutionError"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ScriptExecutionError">[docs]</a><span class="k">class</span> <span class="nc">ScriptExecutionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents a script syntax error.</span>
+<span class="sd">        Useful for helping clients pinpoint issues with the script</span>
+<span class="sd">        interactively</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">line</span>
+
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Unknown Script Error&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">full_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;ScriptError [Line </span><span class="si">%s</span><span class="s2">]: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnvironmentBuilder"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.EnvironmentBuilder">[docs]</a><span class="k">class</span> <span class="nc">EnvironmentBuilder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds an execution environment for a cadquery script.</span>
+<span class="sd">    The environment includes the builtins, as well as</span>
+<span class="sd">    the other methods the script will need.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">with_real_builtins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_builtins</span><span class="p">(</span><span class="n">__builtins__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">with_builtins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env_dict</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">with_cadquery_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;cadquery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cadquery</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;cq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cadquery</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">add_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span></div>
+
+<div class="viewcode-block" id="ParameterDescriptionFinder"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ParameterDescriptionFinder">[docs]</a><span class="k">class</span> <span class="nc">ParameterDescriptionFinder</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visits a parse tree, looking for function calls to describe_parameter(var, description )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cq_model</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span> <span class="o">=</span> <span class="n">cq_model</span>
+
+<div class="viewcode-block" id="ParameterDescriptionFinder.visit_Call"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ParameterDescriptionFinder.visit_Call">[docs]</a>    <span class="k">def</span> <span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+       <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Called when we see a function call. Is it describe_parameter?</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+       <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="s1">&#39;describe_parameter&#39;</span><span class="p">:</span>
+                <span class="c1">#looks like we have a call to our function.</span>
+                <span class="c1">#first parameter is the variable,</span>
+                <span class="c1">#second is the description</span>
+                <span class="n">varname</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_parameter_description</span><span class="p">(</span><span class="n">varname</span><span class="p">,</span><span class="n">desc</span><span class="p">)</span>
+
+       <span class="k">except</span><span class="p">:</span>
+            <span class="c1">#print &quot;Unable to handle function call&quot;</span>
+            <span class="k">pass</span>
+       <span class="k">return</span> <span class="n">node</span></div></div>
+
+<div class="viewcode-block" id="ConstantAssignmentFinder"><a class="viewcode-back" href="../../cqgi.html#cadquery.cqgi.ConstantAssignmentFinder">[docs]</a><span class="k">class</span> <span class="nc">ConstantAssignmentFinder</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visits a parse tree, and adds script parameters to the cqModel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cq_model</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span> <span class="o">=</span> <span class="n">cq_model</span>
+
+    <span class="k">def</span> <span class="nf">handle_assignment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">value_node</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value_node</span><span class="p">)</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">Num</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                    <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">NumberParameterType</span><span class="p">,</span> <span class="n">value_node</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">value_node</span><span class="p">)</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                    <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">StringParameterType</span><span class="p">,</span> <span class="n">value_node</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">value_node</span><span class="p">)</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value_node</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                        <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">BooleanParameterType</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">value_node</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="s1">&#39;False&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                        <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">BooleanParameterType</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ast</span><span class="p">,</span> <span class="s1">&#39;NameConstant&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value_node</span><span class="p">)</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">NameConstant</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value_node</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                        <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">BooleanParameterType</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cqModel</span><span class="o">.</span><span class="n">add_script_parameter</span><span class="p">(</span>
+                        <span class="n">InputParameter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">BooleanParameterType</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Unable to handle assignment for variable &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">var_name</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">visit_Assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">left_side</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                    <span class="c1">#do not handle attribute assignments</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">left_side</span><span class="p">,</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+                <span class="k">return</span>
+
+            <span class="c1"># Handle the NamedConstant type that is only present in Python 3</span>
+            <span class="n">astTypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Num</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ast</span><span class="p">,</span> <span class="s1">&#39;NameConstant&#39;</span><span class="p">):</span>
+                <span class="n">astTypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NameConstant</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">astTypes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_assignment</span><span class="p">(</span><span class="n">left_side</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="n">ast</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+                <span class="c1"># we have a multi-value assignment</span>
+                <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">left_side</span><span class="o">.</span><span class="n">elts</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">elts</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handle_assignment</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Unable to handle assignment for node &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">left_side</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">node</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RoadMap: Planned Features &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="prev" title="Extending CadQuery" href="extending.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">RoadMap:  Planned Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#selectors">Selectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workplanes">Workplanes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#d-operations">2-d operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3-d operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#algorithms">Algorithms</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>RoadMap:  Planned Features</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="roadmap-planned-features">
+<span id="roadmap"></span><h1>RoadMap:  Planned Features<a class="headerlink" href="#roadmap-planned-features" title="Permalink to this headline">¶</a></h1>
+<p><strong>CadQuery is not even close to finished!!!</strong></p>
+<p>Many features are planned for later versions.  This page tracks them.  If you find that you need features
+not listed here, let us know!</p>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>end(n)</dt>
+<dd>allows moving backwards a fixed number of parents in the chain, eg end(3) is same as end().end().end()</dd>
+<dt>FreeCAD object wrappers</dt>
+<dd>return CQ wrappers for FreeCAD shapes instead of the native FreeCAD objects.</dd>
+<dt>Improved iteration tools for plugin developers</dt>
+<dd>make it easier to iterate over points and wires for plugins</dd>
+</dl>
+<p>More parameter types (String? )</p>
+<dl class="docutils">
+<dt>face.outerWire</dt>
+<dd>allow selecting the outerWire of a face, so that it can be used for reference geometry or offsets</dd>
+</dl>
+</div>
+<div class="section" id="selectors">
+<h2>Selectors<a class="headerlink" href="#selectors" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>tagged entities</dt>
+<dd>support tagging entities when they are created, so they can be selected later on using that tag.
+ideally, tags are propagated to features that are created from these features ( ie, an edge tagged with &#8216;foo&#8217;
+that is later extruded into a face means that face would be tagged with &#8216;foo&#8217; as well )</dd>
+</dl>
+</div>
+<div class="section" id="workplanes">
+<h2>Workplanes<a class="headerlink" href="#workplanes" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>rotated workplanes</dt>
+<dd>support creation of workplanes at an angle to another plane or face</dd>
+<dt>workplane local rotations</dt>
+<dd>rotate the coordinate system of a workplane by an angle.</dd>
+<dt>make a workplane from a wire</dt>
+<dd>useful to select outer wire and then operate from there, to allow offsets</dd>
+</dl>
+</div>
+<div class="section" id="d-operations">
+<h2>2-d operations<a class="headerlink" href="#d-operations" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>offsets</dt>
+<dd>offset profiles, including circles, rects, and other profiles.</dd>
+<dt>ellipses</dt>
+<dd>create elipses and portions of elipses</dd>
+<dt>regular polygons</dt>
+<dd><dl class="first last docutils">
+<dt>several construction methods:</dt>
+<dd><ul class="first last simple">
+<li>number of sides and side length</li>
+<li>number of sides inscribed in circle</li>
+<li>number of sides circumscribed by circle</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>arc construction using relative measures</dt>
+<dd>instead of forcing use of absolute workplane coordinates</dd>
+<dt>tangent arcs</dt>
+<dd>after a line</dd>
+<dt>centerpoint arcs</dt>
+<dd>including portions of arcs as well as with end points specified</dd>
+<dt>trimming</dt>
+<dd>ability to use construction geometry to trim other entities</dd>
+<dt>construction lines</dt>
+<dd>especially centerlines</dd>
+<dt>2-d fillets</dt>
+<dd>for a rectangle, or for consecutive selected lines</dd>
+<dt>2-d chamfers</dt>
+<dd>based on rectangles, polygons, polylines, or adjacent selected lines</dd>
+<dt>mirror around centerline</dt>
+<dd>using centerline construction geometry</dd>
+<dt>rectangular array</dt>
+<dd>automate creation of equally spread points</dd>
+<dt>polar array</dt>
+<dd>create equally spaced copies of a feature around a circle
+perhaps based on a construction circle?</dd>
+<dt>midpoint selection</dt>
+<dd>select midpoints of lines, arcs</dd>
+<dt>face center</dt>
+<dd>explicit selection of face center</dd>
+<dt>manipulate spline control points</dt>
+<dd>so that the shape of a spline can be more accurately controlled</dd>
+<dt>feature snap</dt>
+<dd>project geometry in the rest of the part into the work plane, so that
+they can be selected and used as references for other features.</dd>
+<dt>polyline edges</dt>
+<dd>allow polyline to be combined with other edges/curves</dd>
+<dt>create text</dt>
+<dd>ideally, in various fonts.</dd>
+</dl>
+</div>
+<div class="section" id="id1">
+<h2>3-d operations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>rotation/transform that return a copy</dt>
+<dd>The current rotateAboutCenter and translate method modify the object, rather than returning a copy</dd>
+<dt>primitive creation</dt>
+<dd><dl class="first last docutils">
+<dt>Need primitive creation for:</dt>
+<dd><ul class="first last simple">
+<li>cone</li>
+<li>sphere</li>
+<li>cylinder</li>
+<li>torus</li>
+<li>wedge</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>extrude/cut up to surface</dt>
+<dd>allow a cut or extrude to terminate at another surface, rather than either through all or a fixed distance</dd>
+<dt>extrude along a path</dt>
+<dd>rather than just normal to the plane.  This would include</dd>
+<dt>STEP import</dt>
+<dd>allow embedding and importing step solids created in other tools, which
+can then be further manipulated parametrically</dd>
+<dt>Dome</dt>
+<dd>very difficult to do otherwise</dd>
+<dt>primitive boolean operations</dt>
+<dd><ul class="first last simple">
+<li>intersect</li>
+<li>union</li>
+<li>subtract</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Wire Discretization</dt>
+<dd>Sample wires at point interval to improve closet wire computations</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="extending.html" class="btn btn-neutral" title="Extending CadQuery" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

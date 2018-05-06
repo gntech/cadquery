@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cadquery.selectors &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="../../_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>cadquery.selectors</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cadquery.selectors</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copyright (C) 2011-2015  Parametric Products Intellectual Holdings, LLC</span>
+
+<span class="sd">    This file is part of CadQuery.</span>
+
+<span class="sd">    CadQuery is free software; you can redistribute it and/or</span>
+<span class="sd">    modify it under the terms of the GNU Lesser General Public</span>
+<span class="sd">    License as published by the Free Software Foundation; either</span>
+<span class="sd">    version 2.1 of the License, or (at your option) any later version.</span>
+
+<span class="sd">    CadQuery is distributed in the hope that it will be useful,</span>
+<span class="sd">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="sd">    Lesser General Public License for more details.</span>
+
+<span class="sd">    You should have received a copy of the GNU Lesser General Public</span>
+<span class="sd">    License along with this library; If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">cadquery</span> <span class="kn">import</span> <span class="n">Vector</span><span class="p">,</span><span class="n">Edge</span><span class="p">,</span><span class="n">Vertex</span><span class="p">,</span><span class="n">Face</span><span class="p">,</span><span class="n">Solid</span><span class="p">,</span><span class="n">Shell</span><span class="p">,</span><span class="n">Compound</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">pyparsing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span><span class="n">Word</span><span class="p">,</span><span class="n">nums</span><span class="p">,</span><span class="n">Optional</span><span class="p">,</span><span class="n">Combine</span><span class="p">,</span><span class="n">oneOf</span><span class="p">,</span><span class="n">upcaseTokens</span><span class="p">,</span>\
+                      <span class="n">CaselessLiteral</span><span class="p">,</span><span class="n">Group</span><span class="p">,</span><span class="n">infixNotation</span><span class="p">,</span><span class="n">opAssoc</span><span class="p">,</span><span class="n">Forward</span><span class="p">,</span>\
+                      <span class="n">ZeroOrMore</span><span class="p">,</span><span class="n">Keyword</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+
+<div class="viewcode-block" id="Selector"><a class="viewcode-back" href="../../classreference.html#cadquery.Selector">[docs]</a><span class="k">class</span> <span class="nc">Selector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filters a list of objects</span>
+
+<span class="sd">        Filters must provide a single method that filters objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Selector.filter"><a class="viewcode-back" href="../../classreference.html#cadquery.Selector.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Filter the provided list</span>
+<span class="sd">            :param objectList: list to filter</span>
+<span class="sd">            :type objectList: list of FreeCAD primatives</span>
+<span class="sd">            :return: filtered list</span>
+
+<span class="sd">            The default implementation returns the original list unfiltered</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">objectList</span></div>
+
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">AndSelector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SumSelector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SubtractSelector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">InverseSelector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NearestToPointSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.NearestToPointSelector">[docs]</a><span class="k">class</span> <span class="nc">NearestToPointSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Selects object nearest the provided point.</span>
+
+<span class="sd">    If the object is a vertex or point, the distance</span>
+<span class="sd">    is used. For other kinds of shapes, the center of mass</span>
+<span class="sd">    is used to to compute which is closest.</span>
+
+<span class="sd">    Applicability: All Types of Shapes</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">       CQ(aCube).vertices(NearestToPointSelector((0,1,0))</span>
+
+<span class="sd">    returns the vertex of the unit cube closest to the point x=0,y=1,z=0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pnt</span> <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pnt</span> <span class="o">=</span> <span class="n">pnt</span>
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">tShape</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">tShape</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">pnt</span><span class="p">))</span><span class="o">.</span><span class="n">Length</span>
+            <span class="c1">#if tShape.ShapeType == &#39;Vertex&#39;:</span>
+            <span class="c1">#    return tShape.Point.sub(toVector(self.pnt)).Length</span>
+            <span class="c1">#else:</span>
+            <span class="c1">#    return tShape.CenterOfMass.sub(toVector(self.pnt)).Length</span>
+
+        <span class="k">return</span> <span class="p">[</span> <span class="nb">min</span><span class="p">(</span><span class="n">objectList</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span> <span class="p">]</span></div>
+
+<span class="k">class</span> <span class="nc">BoxSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Selects objects inside the 3D box defined by 2 points.</span>
+
+<span class="sd">    If `boundingbox` is True only the objects that have their bounding</span>
+<span class="sd">    box inside the given box is selected. Otherwise only center point</span>
+<span class="sd">    of the object is tested.</span>
+
+<span class="sd">    Applicability: all types of shapes</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        CQ(aCube).edges(BoxSelector((0,1,0), (1,2,1))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point0</span><span class="p">,</span> <span class="n">point1</span><span class="p">,</span> <span class="n">boundingbox</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">point0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">point1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_boundingbox</span> <span class="o">=</span> <span class="n">boundingbox</span>
+
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectList</span><span class="p">):</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">toTuple</span><span class="p">()</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">toTuple</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">isInsideBox</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+            <span class="c1"># using XOR for checking if x/y/z is in between regardless</span>
+            <span class="c1"># of order of x/y/z0 and x/y/z1</span>
+            <span class="k">return</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">x1</span><span class="p">))</span> <span class="ow">and</span> \
+                   <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">y0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">y1</span><span class="p">))</span> <span class="ow">and</span> \
+                   <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">z0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">z1</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_boundingbox</span><span class="p">:</span>
+                <span class="n">bb</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">isInsideBox</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">bb</span><span class="o">.</span><span class="n">zmin</span><span class="p">))</span> <span class="ow">and</span> \
+                   <span class="n">isInsideBox</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="n">bb</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="n">bb</span><span class="o">.</span><span class="n">zmax</span><span class="p">)):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">isInsideBox</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">Center</span><span class="p">()):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">class</span> <span class="nc">BaseDirSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A selector that handles selection on the basis of a single</span>
+<span class="sd">        direction vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vector</span><span class="p">,</span><span class="n">tolerance</span><span class="o">=</span><span class="mf">0.0001</span> <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span> <span class="o">=</span> <span class="n">tolerance</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="s2">&quot;Test a specified vector. Subclasses override to provide other implementations&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            There are lots of kinds of filters, but</span>
+<span class="sd">            for planes they are always based on the normal of the plane,</span>
+<span class="sd">            and for edges on the tangent vector along the edge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">:</span>
+            <span class="c1">#no really good way to avoid a switch here, edges and faces are simply different!</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">Face</span><span class="p">:</span>
+                <span class="c1"># a face is only parallell to a direction if it is a plane, and its normal is parallel to the dir</span>
+                <span class="n">normal</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">normalAt</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">normal</span><span class="p">):</span>
+                    <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">Edge</span> <span class="ow">and</span> <span class="n">o</span><span class="o">.</span><span class="n">geomType</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;LINE&#39;</span><span class="p">:</span>
+                <span class="c1">#an edge is parallel to a direction if it is a line, and the line is parallel to the dir</span>
+                <span class="n">tangent</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">tangentAt</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">tangent</span><span class="p">):</span>
+                    <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">r</span>
+
+<div class="viewcode-block" id="ParallelDirSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.ParallelDirSelector">[docs]</a><span class="k">class</span> <span class="nc">ParallelDirSelector</span><span class="p">(</span><span class="n">BaseDirSelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects objects parallel with the provided direction</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            Linear Edges</span>
+<span class="sd">            Planar Faces</span>
+
+<span class="sd">        Use the string syntax shortcut \|(X|Y|Z) if you want to select</span>
+<span class="sd">        based on a cardinal direction.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            CQ(aCube).faces(ParallelDirSelector((0,0,1))</span>
+
+<span class="sd">        selects faces with a normals in the z direction, and is equivalent to::</span>
+
+<span class="sd">            CQ(aCube).faces(&quot;|Z&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="o">.</span><span class="n">Length</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span></div>
+
+<div class="viewcode-block" id="DirectionSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.DirectionSelector">[docs]</a><span class="k">class</span> <span class="nc">DirectionSelector</span><span class="p">(</span><span class="n">BaseDirSelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects objects aligned with the provided direction</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            Linear Edges</span>
+<span class="sd">            Planar Faces</span>
+
+<span class="sd">        Use the string syntax shortcut +/-(X|Y|Z) if you want to select</span>
+<span class="sd">        based on a cardinal direction.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            CQ(aCube).faces(DirectionSelector((0,0,1))</span>
+
+<span class="sd">        selects faces with a normals in the z direction, and is equivalent to::</span>
+
+<span class="sd">            CQ(aCube).faces(&quot;+Z&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">getAngle</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PerpendicularDirSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.PerpendicularDirSelector">[docs]</a><span class="k">class</span> <span class="nc">PerpendicularDirSelector</span><span class="p">(</span><span class="n">BaseDirSelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects objects perpendicular with the provided direction</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            Linear Edges</span>
+<span class="sd">            Planar Faces</span>
+
+<span class="sd">        Use the string syntax shortcut #(X|Y|Z) if you want to select</span>
+<span class="sd">        based on a cardinal direction.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            CQ(aCube).faces(PerpendicularDirSelector((0,0,1))</span>
+
+<span class="sd">        selects faces with a normals perpendicular to the z direction, and is equivalent to::</span>
+
+<span class="sd">            CQ(aCube).faces(&quot;#Z&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">getAngle</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">angle</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="TypeSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.TypeSelector">[docs]</a><span class="k">class</span> <span class="nc">TypeSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects objects of the prescribed topological type.</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            Faces: Plane,Cylinder,Sphere</span>
+<span class="sd">            Edges: Line,Circle,Arc</span>
+
+<span class="sd">        You can use the shortcut selector %(PLANE|SPHERE|CONE) for faces,</span>
+<span class="sd">        and %(LINE|ARC|CIRCLE) for edges.</span>
+
+<span class="sd">        For example this::</span>
+
+<span class="sd">            CQ(aCube).faces ( TypeSelector(&quot;PLANE&quot;) )</span>
+
+<span class="sd">        will select 6 faces, and is equivalent to::</span>
+
+<span class="sd">            CQ(aCube).faces( &quot;%PLANE&quot; )</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typeString</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typeString</span> <span class="o">=</span> <span class="n">typeString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">geomType</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">typeString</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="DirectionMinMaxSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.DirectionMinMaxSelector">[docs]</a><span class="k">class</span> <span class="nc">DirectionMinMaxSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects objects closest or farthest in the specified direction</span>
+<span class="sd">        Used for faces, points, and edges</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            All object types. for a vertex, its point is used. for all other kinds</span>
+<span class="sd">            of objects, the center of mass of the object is used.</span>
+
+<span class="sd">        You can use the string shortcuts &gt;(X|Y|Z) or &lt;(X|Y|Z) if you want to</span>
+<span class="sd">        select based on a cardinal direction.</span>
+
+<span class="sd">        For example this::</span>
+
+<span class="sd">            CQ(aCube).faces ( DirectionMinMaxSelector((0,0,1),True )</span>
+
+<span class="sd">        Means to select the face having the center of mass farthest in the positive z direction,</span>
+<span class="sd">        and is the same as:</span>
+
+<span class="sd">            CQ(aCube).faces( &quot;&gt;Z&quot; )</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">directionMax</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directionMax</span> <span class="o">=</span> <span class="n">directionMax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span> <span class="o">=</span> <span class="n">tolerance</span>
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">tShape</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">tShape</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+
+        <span class="c1"># import OrderedDict</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+        <span class="c1">#make and distance to object dict</span>
+        <span class="n">objectDict</span> <span class="o">=</span> <span class="p">{</span><span class="n">distance</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="p">:</span> <span class="n">el</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">}</span>
+        <span class="c1">#transform it into an ordered dict</span>
+        <span class="n">objectDict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objectDict</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># find out the max/min distance</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directionMax</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">objectDict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">objectDict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            
+        <span class="c1"># return all objects at the max/min distance (within a tolerance)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objectList</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">distance</span><span class="p">(</span><span class="n">o</span><span class="p">))</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span><span class="p">]</span></div>
+
+<span class="k">class</span> <span class="nc">DirectionNthSelector</span><span class="p">(</span><span class="n">ParallelDirSelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects nth object parallel (or normal) to the specified direction</span>
+<span class="sd">        Used for faces and edges</span>
+
+<span class="sd">        Applicability:</span>
+<span class="sd">            Linear Edges</span>
+<span class="sd">            Planar Faces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">directionMax</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directionMax</span> <span class="o">=</span> <span class="n">directionMax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">n</span>
+    
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="c1">#select first the objects that are normal/parallel to a given dir</span>
+        <span class="n">objectList</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">DirectionNthSelector</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">tShape</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">tShape</span><span class="o">.</span><span class="n">Center</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+        
+        <span class="c1">#calculate how many digits of precision do we need</span>
+        <span class="n">digits</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">TOLERANCE</span><span class="p">)</span>
+
+        <span class="c1">#make a distance to object dict</span>
+        <span class="c1">#this is one to many mapping so I am using a default dict with list</span>
+        <span class="n">objectDict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">objectList</span><span class="p">:</span> 
+            <span class="n">objectDict</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">el</span><span class="p">),</span><span class="n">digits</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+        
+        <span class="c1"># choose the Nth unique rounded distance</span>
+        <span class="n">nth_distance</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objectDict</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                              <span class="n">reverse</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directionMax</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+            
+        <span class="c1"># map back to original objects and return</span>
+        <span class="k">return</span> <span class="n">objectDict</span><span class="p">[</span><span class="n">nth_distance</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">BinarySelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for selectors that operates with two other</span>
+<span class="sd">    selectors. Subclass must implement the :filterResults(): method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectList</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterResults</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">),</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">filterResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_left</span><span class="p">,</span> <span class="n">r_right</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">class</span> <span class="nc">AndSelector</span><span class="p">(</span><span class="n">BinarySelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Intersection selector. Returns objects that is selected by both selectors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">filterResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_left</span><span class="p">,</span> <span class="n">r_right</span><span class="p">):</span>
+        <span class="c1"># return intersection of lists</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">r_left</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_right</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">SumSelector</span><span class="p">(</span><span class="n">BinarySelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Union selector. Returns the sum of two selectors results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">filterResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_left</span><span class="p">,</span> <span class="n">r_right</span><span class="p">):</span>
+        <span class="c1"># return the union (no duplicates) of lists</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">r_left</span> <span class="o">+</span> <span class="n">r_right</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">SubtractSelector</span><span class="p">(</span><span class="n">BinarySelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Difference selector. Substract results of a selector from another</span>
+<span class="sd">    selectors results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">filterResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_left</span><span class="p">,</span> <span class="n">r_right</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">r_left</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_right</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">InverseSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inverts the selection of given selector. In other words, selects</span>
+<span class="sd">    all objects that is not selected by given selector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="n">selector</span>
+
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectList</span><span class="p">):</span>
+        <span class="c1"># note that Selector() selects everything</span>
+        <span class="k">return</span> <span class="n">SubtractSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_makeGrammar</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define the simple string selector grammar using PyParsing</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1">#float definition</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">plusmin</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">Word</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">integer</span> <span class="o">=</span> <span class="n">Combine</span><span class="p">(</span><span class="n">Optional</span><span class="p">(</span><span class="n">plusmin</span><span class="p">)</span> <span class="o">+</span> <span class="n">number</span><span class="p">)</span>
+    <span class="n">floatn</span> <span class="o">=</span> <span class="n">Combine</span><span class="p">(</span><span class="n">integer</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">point</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">number</span><span class="p">)))</span>
+    
+    <span class="c1">#vector definition</span>
+    <span class="n">lbracket</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)</span>
+    <span class="n">rbracket</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)</span>
+    <span class="n">comma</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">vector</span> <span class="o">=</span> <span class="n">Combine</span><span class="p">(</span><span class="n">lbracket</span> <span class="o">+</span> <span class="n">floatn</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">comma</span> <span class="o">+</span> \
+                     <span class="n">floatn</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">comma</span> <span class="o">+</span> <span class="n">floatn</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">rbracket</span><span class="p">)</span>
+    
+    <span class="c1">#direction definition</span>
+    <span class="n">simple_dir</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span><span class="s1">&#39;XY&#39;</span><span class="p">,</span><span class="s1">&#39;XZ&#39;</span><span class="p">,</span><span class="s1">&#39;YZ&#39;</span><span class="p">])</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">simple_dir</span><span class="p">(</span><span class="s1">&#39;simple_dir&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">vector</span><span class="p">(</span><span class="s1">&#39;vector_dir&#39;</span><span class="p">)</span>
+    
+    <span class="c1">#CQ type definition</span>
+    <span class="n">cqtype</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span><span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span><span class="s1">&#39;Sphere&#39;</span><span class="p">,</span><span class="s1">&#39;Cone&#39;</span><span class="p">,</span><span class="s1">&#39;Line&#39;</span><span class="p">,</span><span class="s1">&#39;Circle&#39;</span><span class="p">,</span><span class="s1">&#39;Arc&#39;</span><span class="p">],</span>
+                   <span class="n">caseless</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">cqtype</span> <span class="o">=</span> <span class="n">cqtype</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="n">upcaseTokens</span><span class="p">)</span>
+    
+    <span class="c1">#type operator        </span>
+    <span class="n">type_op</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
+    
+    <span class="c1">#direction operator</span>
+    <span class="n">direction_op</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span><span class="s1">&#39;&lt;&#39;</span><span class="p">])</span>
+    
+    <span class="c1">#index definition</span>
+    <span class="n">ix_number</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">Optional</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">Word</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>
+    <span class="n">lsqbracket</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">suppress</span><span class="p">()</span>
+    <span class="n">rsqbracket</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">suppress</span><span class="p">()</span>
+    
+    <span class="n">index</span> <span class="o">=</span> <span class="n">lsqbracket</span> <span class="o">+</span> <span class="n">ix_number</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">rsqbracket</span>
+    
+    <span class="c1">#other operators</span>
+    <span class="n">other_op</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;|&#39;</span><span class="p">,</span><span class="s1">&#39;#&#39;</span><span class="p">,</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">])</span>
+    
+    <span class="c1">#named view</span>
+    <span class="n">named_view</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;front&#39;</span><span class="p">,</span><span class="s1">&#39;back&#39;</span><span class="p">,</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">,</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;bottom&#39;</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">direction</span><span class="p">(</span><span class="s1">&#39;only_dir&#39;</span><span class="p">)</span> <span class="o">|</span> \
+           <span class="p">(</span><span class="n">type_op</span><span class="p">(</span><span class="s1">&#39;type_op&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">cqtype</span><span class="p">(</span><span class="s1">&#39;cq_type&#39;</span><span class="p">))</span> <span class="o">|</span> \
+           <span class="p">(</span><span class="n">direction_op</span><span class="p">(</span><span class="s1">&#39;dir_op&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">direction</span><span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">index</span><span class="p">))</span> <span class="o">|</span> \
+           <span class="p">(</span><span class="n">other_op</span><span class="p">(</span><span class="s1">&#39;other_op&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">direction</span><span class="p">(</span><span class="s1">&#39;dir&#39;</span><span class="p">))</span> <span class="o">|</span> \
+           <span class="n">named_view</span><span class="p">(</span><span class="s1">&#39;named_view&#39;</span><span class="p">)</span>
+
+<span class="n">_grammar</span> <span class="o">=</span> <span class="n">_makeGrammar</span><span class="p">()</span> <span class="c1">#make a grammar instance</span>
+
+<span class="k">class</span> <span class="nc">_SimpleStringSyntaxSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a private class that converts a parseResults object into a simple</span>
+<span class="sd">    selector object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parseResults</span><span class="p">):</span>
+        
+        <span class="c1">#define all token to object mappings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;Z&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+            <span class="s1">&#39;XY&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;YZ&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+            <span class="s1">&#39;XZ&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">namedViews</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;front&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="bp">True</span><span class="p">),</span>
+            <span class="s1">&#39;back&#39;</span>  <span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="bp">False</span><span class="p">),</span>
+            <span class="s1">&#39;left&#39;</span>  <span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="bp">False</span><span class="p">),</span>
+            <span class="s1">&#39;right&#39;</span> <span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="bp">True</span><span class="p">),</span>
+            <span class="s1">&#39;top&#39;</span>   <span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="bp">True</span><span class="p">),</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="bp">False</span><span class="p">)</span>
+        <span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">operatorMinMax</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;&gt;&#39;</span> <span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s1">&#39;+&#39;</span> <span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;-&#39;</span> <span class="p">:</span> <span class="bp">False</span>
+        <span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;+&#39;</span> <span class="p">:</span> <span class="n">DirectionSelector</span><span class="p">,</span>
+            <span class="s1">&#39;-&#39;</span> <span class="p">:</span> <span class="n">DirectionSelector</span><span class="p">,</span>
+            <span class="s1">&#39;#&#39;</span> <span class="p">:</span> <span class="n">PerpendicularDirSelector</span><span class="p">,</span>
+            <span class="s1">&#39;|&#39;</span> <span class="p">:</span> <span class="n">ParallelDirSelector</span><span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseResults</span> <span class="o">=</span> <span class="n">parseResults</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mySelector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chooseSelector</span><span class="p">(</span><span class="n">parseResults</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_chooseSelector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up the underlying filters accordingly</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;only_dir&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getVector</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">DirectionSelector</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="s1">&#39;type_op&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TypeSelector</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">cq_type</span><span class="p">)</span> 
+        
+        <span class="k">elif</span> <span class="s1">&#39;dir_op&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getVector</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span>
+            <span class="n">minmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operatorMinMax</span><span class="p">[</span><span class="n">pr</span><span class="o">.</span><span class="n">dir_op</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">DirectionNthSelector</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">asList</span><span class="p">())),</span><span class="n">minmax</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">DirectionMinMaxSelector</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="n">minmax</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="s1">&#39;other_op&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getVector</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="p">[</span><span class="n">pr</span><span class="o">.</span><span class="n">other_op</span><span class="p">](</span><span class="n">vec</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namedViews</span><span class="p">[</span><span class="n">pr</span><span class="o">.</span><span class="n">named_view</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">DirectionMinMaxSelector</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">_getVector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Translate parsed vector string into a CQ Vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;vector_dir&#39;</span> <span class="ow">in</span> <span class="n">pr</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">vector_dir</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">x</span><span class="p">),</span><span class="nb">float</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="nb">float</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">pr</span><span class="o">.</span><span class="n">simple_dir</span><span class="p">]</span>
+            
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            selects minimum, maximum, positive or negative values relative to a direction</span>
+<span class="sd">            [+\|-\|&lt;\|&gt;\|] \&lt;X\|Y\|Z&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mySelector</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_makeExpressionGrammar</span><span class="p">(</span><span class="n">atom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define the complex string selector grammar using PyParsing (which supports</span>
+<span class="sd">    logical operations and nesting)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1">#define operators</span>
+    <span class="n">and_op</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;and&#39;</span><span class="p">)</span>
+    <span class="n">or_op</span> <span class="o">=</span>  <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+    <span class="n">delta_op</span> <span class="o">=</span> <span class="n">oneOf</span><span class="p">([</span><span class="s1">&#39;exc&#39;</span><span class="p">,</span><span class="s1">&#39;except&#39;</span><span class="p">])</span>
+    <span class="n">not_op</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;not&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">atom_callback</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_SimpleStringSyntaxSelector</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    
+    <span class="n">atom</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="n">atom_callback</span><span class="p">)</span> <span class="c1">#construct a simple selector from every matched</span>
+    
+    <span class="c1">#define callback functions for all operations</span>
+    <span class="k">def</span> <span class="nf">and_callback</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">asList</span><span class="p">()[</span><span class="mi">0</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span> <span class="c1">#take every secend items, i.e. all operands</span>
+        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">AndSelector</span><span class="p">,</span><span class="n">items</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">or_callback</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">asList</span><span class="p">()[</span><span class="mi">0</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span> <span class="c1">#take every secend items, i.e. all operands</span>
+        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">SumSelector</span><span class="p">,</span><span class="n">items</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">exc_callback</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">asList</span><span class="p">()[</span><span class="mi">0</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span> <span class="c1">#take every secend items, i.e. all operands</span>
+        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">SubtractSelector</span><span class="p">,</span><span class="n">items</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">not_callback</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">asList</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#take second item, i.e. the operand</span>
+        <span class="k">return</span> <span class="n">InverseSelector</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+
+    <span class="c1">#construct the final grammar and set all the callbacks</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">infixNotation</span><span class="p">(</span><span class="n">atom</span><span class="p">,</span>
+                         <span class="p">[(</span><span class="n">and_op</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">opAssoc</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span><span class="n">and_callback</span><span class="p">),</span>
+                          <span class="p">(</span><span class="n">or_op</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">opAssoc</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span><span class="n">or_callback</span><span class="p">),</span>
+                          <span class="p">(</span><span class="n">delta_op</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">opAssoc</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span><span class="n">exc_callback</span><span class="p">),</span>
+                          <span class="p">(</span><span class="n">not_op</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">opAssoc</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span><span class="n">not_callback</span><span class="p">)])</span>
+                          
+    <span class="k">return</span> <span class="n">expr</span>
+    
+<span class="n">_expression_grammar</span> <span class="o">=</span> <span class="n">_makeExpressionGrammar</span><span class="p">(</span><span class="n">_grammar</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StringSyntaxSelector"><a class="viewcode-back" href="../../classreference.html#cadquery.StringSyntaxSelector">[docs]</a><span class="k">class</span> <span class="nc">StringSyntaxSelector</span><span class="p">(</span><span class="n">Selector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter lists objects using a simple string syntax. All of the filters available in the string syntax</span>
+<span class="sd">    are also available ( usually with more functionality ) through the creation of full-fledged</span>
+<span class="sd">    selector objects. see :py:class:`Selector` and its subclasses</span>
+
+<span class="sd">    Filtering works differently depending on the type of object list being filtered.</span>
+
+<span class="sd">    :param selectorString: A two-part selector string, [selector][axis]</span>
+
+<span class="sd">    :return: objects that match the specified selector</span>
+
+<span class="sd">    ***Modfiers*** are ``(&#39;|&#39;,&#39;+&#39;,&#39;-&#39;,&#39;&lt;&#39;,&#39;&gt;&#39;,&#39;%&#39;)``</span>
+
+<span class="sd">        :\|:</span>
+<span class="sd">            parallel to ( same as :py:class:`ParallelDirSelector` ). Can return multiple objects.</span>
+<span class="sd">        :#:</span>
+<span class="sd">            perpendicular to (same as :py:class:`PerpendicularDirSelector` )</span>
+<span class="sd">        :+:</span>
+<span class="sd">            positive direction (same as :py:class:`DirectionSelector` )</span>
+<span class="sd">        :-:</span>
+<span class="sd">            negative direction (same as :py:class:`DirectionSelector`  )</span>
+<span class="sd">        :&gt;:</span>
+<span class="sd">            maximize (same as :py:class:`DirectionMinMaxSelector` with directionMax=True)</span>
+<span class="sd">        :&lt;:</span>
+<span class="sd">            minimize (same as :py:class:`DirectionMinMaxSelector` with directionMax=False )</span>
+<span class="sd">        :%:</span>
+<span class="sd">            curve/surface type (same as :py:class:`TypeSelector`)</span>
+
+<span class="sd">    ***axisStrings*** are: ``X,Y,Z,XY,YZ,XZ`` or ``(x,y,z)`` which defines an arbitrary direction</span>
+<span class="sd">    </span>
+<span class="sd">    It is possible to combine simple selectors together using logical operations.</span>
+<span class="sd">    The following operations are suuported</span>
+<span class="sd">    </span>
+<span class="sd">        :and:</span>
+<span class="sd">            Logical AND, e.g. &gt;X and &gt;Y</span>
+<span class="sd">        :or:</span>
+<span class="sd">            Logical OR, e.g. |X or |Y</span>
+<span class="sd">        :not:</span>
+<span class="sd">            Logical NOT, e.g. not #XY</span>
+<span class="sd">        :exc(ept):</span>
+<span class="sd">            Set difference (equivalent to AND NOT): |X exc &gt;Z</span>
+
+<span class="sd">    Finally, it is also possible to use even more complex expressions with nesting</span>
+<span class="sd">    and arbitrary number of terms, e.g.</span>
+<span class="sd">    </span>
+<span class="sd">        (not &gt;X[0] and #XY) or &gt;XY[0] </span>
+
+<span class="sd">    Selectors are a complex topic: see :ref:`selector_reference` for more information</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">selectorString</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feed the input string through the parser and construct an relevant complex selector object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selectorString</span> <span class="o">=</span> <span class="n">selectorString</span>
+        <span class="n">parse_result</span> <span class="o">=</span> <span class="n">_expression_grammar</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">selectorString</span><span class="p">,</span>
+                                                        <span class="n">parseAll</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mySelector</span> <span class="o">=</span> <span class="n">parse_result</span><span class="o">.</span><span class="n">asList</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+<div class="viewcode-block" id="StringSyntaxSelector.filter"><a class="viewcode-back" href="../../classreference.html#cadquery.StringSyntaxSelector.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">objectList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filter give object list through th already constructed complex selector object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mySelector</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">objectList</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

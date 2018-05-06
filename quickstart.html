@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CadQuery QuickStart &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="next" title="CadQuery Design Principles" href="designprinciples.html"/>
+        <link rel="prev" title="Installing CadQuery" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">CadQuery QuickStart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites-freecad-cadquery-freecad-module-in-freecad">Prerequisites: FreeCAD + cadQuery-freeCAD-module in FreeCAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-we-ll-accomplish">What we&#8217;ll accomplish</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-with-a-single-simple-plate">Start With A single, simple Plate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-the-holes">Add the Holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-holes">More Holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filleting">Filleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#done">Done!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#want-to-learn-more">Want to learn more?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>CadQuery QuickStart</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-cadquery">
+<span id="cadquery-quickstart"></span><span id="quickstart"></span><h1>CadQuery QuickStart<a class="headerlink" href="#module-cadquery" title="Permalink to this headline">¶</a></h1>
+<p>Want a quick glimpse of what CadQuery can do?  This quickstart will demonstrate the basics of cadQuery using a simple example</p>
+<div class="section" id="prerequisites-freecad-cadquery-freecad-module-in-freecad">
+<h2>Prerequisites: FreeCAD + cadQuery-freeCAD-module in FreeCAD<a class="headerlink" href="#prerequisites-freecad-cadquery-freecad-module-in-freecad" title="Permalink to this headline">¶</a></h2>
+<p>If you have not already done so, follow the <a class="reference internal" href="installation.html#installation"><span>Installing CadQuery</span></a>, and  to install cadquery, FreeCAD,
+and the cadquery-freecad-module</p>
+<p>After installation, open the CadQuery workbench:</p>
+<img alt="_images/001.png" src="_images/001.png" />
+<p>You&#8217;ll see that we start out with a single block.  Find the cadquery Code Window, at the bottom left.</p>
+<p>If you want check out a couple of the examples in the CadQuery-&gt;Examples menu.</p>
+</div>
+<div class="section" id="what-we-ll-accomplish">
+<h2>What we&#8217;ll accomplish<a class="headerlink" href="#what-we-ll-accomplish" title="Permalink to this headline">¶</a></h2>
+<p>We will build a fully parametric bearing pillow block in this quickstart.  Our finished object will look like this:</p>
+<img alt="_images/000.png" src="_images/000.png" />
+<p><strong>We would like our block to have these features:</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>It should be sized to hold a single 608 ( &#8216;skate&#8217; ) bearing, in the center of the block.</li>
+<li>It should have counter sunk holes for M2 socket head cap screws at the corners</li>
+<li>The length and width of the block should be configurable by the user to any reasonable size.</li>
+</ol>
+</div></blockquote>
+<p>A human would describe this as:</p>
+<blockquote>
+<div>&#8220;A rectangular block 80mm x 60mm x 30mm , with countersunk holes for M2 socket head cap screws
+at the corners, and a circular pocket 22mm in diameter in the middle for a bearing&#8221;</div></blockquote>
+<p>Human descriptions are very elegant, right?
+Hopefully our finished script will not be too much more complex than this human-oriented description.</p>
+<p>Let&#8217;s see how we do.</p>
+</div>
+<div class="section" id="start-with-a-single-simple-plate">
+<h2>Start With A single, simple Plate<a class="headerlink" href="#start-with-a-single-simple-plate" title="Permalink to this headline">¶</a></h2>
+<p>Lets start with a simple model that makes nothing but a rectangular block, but
+with place-holders for the dimensions. Paste this into the CodeWindow:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">height</span> <span class="o">=</span> <span class="mf">60.0</span>
+ <span class="n">width</span> <span class="o">=</span> <span class="mf">80.0</span>
+ <span class="n">thickness</span> <span class="o">=</span> <span class="mf">10.0</span>
+
+ <span class="c1"># make the base</span>
+ <span class="n">result</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>
+
+ <span class="c1"># Render the solid</span>
+ <span class="n">show_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Press F2 to run the script. You should see Our basic base.</p>
+<img alt="_images/002.png" src="_images/002.png" />
+<p>Nothing special, but its a start!</p>
+</div>
+<div class="section" id="add-the-holes">
+<h2>Add the Holes<a class="headerlink" href="#add-the-holes" title="Permalink to this headline">¶</a></h2>
+<p>Our pillow block needs to have a 22mm diameter hole in the center of this block to hold the bearing.</p>
+<p>This modification will do the trick:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">height</span> <span class="o">=</span> <span class="mf">60.0</span>
+ <span class="n">width</span> <span class="o">=</span> <span class="mf">80.0</span>
+ <span class="n">thickness</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="hll"> <span class="n">diameter</span> <span class="o">=</span> <span class="mf">22.0</span>
+</span>
+ <span class="c1"># make the base</span>
+ <span class="n">result</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>\
+<span class="hll">     <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span><span class="o">.</span><span class="n">hole</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span>
+</span>
+ <span class="c1"># Render the solid</span>
+ <span class="n">show_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Rebuild your model by pressing F2. Your block should look like this:</p>
+<img alt="_images/003.png" src="_images/003.png" />
+<p>The code is pretty compact, lets step through it.</p>
+<p><strong>Line 4</strong> adds a new parameter, diameter, for the diamter of the hole</p>
+<p><strong>Line 8</strong>, we&#8217;re adding the hole.
+<a class="reference internal" href="classreference.html#cadquery.CQ.faces" title="cadquery.CQ.faces"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.faces()</span></code></a> selects the top-most face in the Z direction, and then
+<a class="reference internal" href="classreference.html#cadquery.CQ.workplane" title="cadquery.CQ.workplane"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.workplane()</span></code></a> begins a new workplane located on this face. The center of this workplane
+is located at the geometric center of the shape, which in this case is the center of the plate.
+Finally, <a class="reference internal" href="classreference.html#cadquery.Workplane.hole" title="cadquery.Workplane.hole"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.hole()</span></code></a> drills a hole through the part 22mm in diamter</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Don&#8217;t worry about the CadQuery syntax now.. you can learn all about it in the <a class="reference internal" href="apireference.html#apireference"><span>CadQuery API Reference</span></a> later.</p>
+</div>
+</div>
+<div class="section" id="more-holes">
+<h2>More Holes<a class="headerlink" href="#more-holes" title="Permalink to this headline">¶</a></h2>
+<p>Ok, that hole was not too hard, but what about the counter-bored holes in the corners?</p>
+<p>An M2 Socket head cap screw has these dimensions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Head Diameter</strong> : 3.8 mm</li>
+<li><strong>Head height</strong>  : 2.0 mm</li>
+<li><strong>Clearance Hole</strong> : 2.4 mm</li>
+<li><strong>CounterBore diameter</strong> : 4.4 mm</li>
+</ul>
+</div></blockquote>
+<p>The centers of these holes should be 4mm from the edges of the block. And,
+we want the block to work correctly even when the block is re-sized by the user.</p>
+<p><strong>Don&#8217;t tell me</strong> we&#8217;ll have to repeat the steps above 8 times to get counter-bored holes?
+Good news!&#8211; we can get the job done with just two lines of code. Here&#8217;s the code we need:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">height</span> <span class="o">=</span> <span class="mf">60.0</span>
+ <span class="n">width</span> <span class="o">=</span> <span class="mf">80.0</span>
+ <span class="n">thickness</span> <span class="o">=</span> <span class="mf">10.0</span>
+ <span class="n">diameter</span> <span class="o">=</span> <span class="mf">22.0</span>
+<span class="hll"> <span class="n">padding</span> <span class="o">=</span> <span class="mf">12.0</span>
+</span>
+ <span class="c1"># make the base</span>
+ <span class="n">result</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span><span class="o">.</span><span class="n">hole</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span>\
+<span class="hll">     <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span> \
+</span><span class="hll">     <span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span><span class="n">width</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span><span class="n">forConstruction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>\
+</span><span class="hll">     <span class="o">.</span><span class="n">vertices</span><span class="p">()</span>\
+</span><span class="hll">     <span class="o">.</span><span class="n">cboreHole</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">)</span>
+</span>
+ <span class="c1"># Render the solid</span>
+ <span class="n">show_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>After pressing F2 to re-execute the model, you should see something like this:</p>
+<blockquote>
+<div><img alt="_images/004.png" src="_images/004.png" />
+</div></blockquote>
+<p>There is quite a bit going on here, so lets break it down a bit.</p>
+<p><strong>Line 5</strong> creates a new padding parameter that decides how far the holes are from the edges of the plate.</p>
+<p><strong>Line 10</strong> selects the top-most face of the block, and creates a workplane on the top of that face, which we&#8217;ll use to
+define the centers of the holes in the corners.</p>
+<p>There are a couple of things to note about this line:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>The <a class="reference internal" href="classreference.html#cadquery.Workplane.rect" title="cadquery.Workplane.rect"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.rect()</span></code></a> function draws a rectangle.  <strong>forConstruction=True</strong>
+tells CadQuery that this rectangle will not form a part of the solid,
+but we are just using it to help define some other geometry.</li>
+<li>The center point of a workplane on a face is always at the center of the face, which works well here</li>
+<li>Unless you specifiy otherwise, a rectangle is drawn with its center on the current workplane center&#8211; in
+this case, the center of the top face of the block. So this rectangle will be centered on the face</li>
+</ol>
+</div></blockquote>
+<p><strong>Line 11</strong> draws a rectangle 8mm smaller than the overall length and width of the block,which we will use to
+locate the corner holes. We&#8217;ll use the vertices ( corners ) of this rectangle to locate the holes. The rectangle&#8217;s
+center is at the center of the workplane, which in this case co-incides with the center of the bearing hole.</p>
+<p><strong>Line 12</strong> selects the vertices of the rectangle, which we will use for the centers of the holes.
+The <a class="reference internal" href="classreference.html#cadquery.CQ.vertices" title="cadquery.CQ.vertices"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.vertices()</span></code></a> function selects the corners of the rectangle</p>
+<p><strong>Line 13</strong> uses the cboreHole function to draw the holes.
+The <a class="reference internal" href="classreference.html#cadquery.Workplane.cboreHole" title="cadquery.Workplane.cboreHole"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.cboreHole()</span></code></a> function is a handy CadQuery function that makes a counterbored hole,
+like most other CadQuery functions, operate on the values on the stack.  In this case, since we
+selected the four vertices before calling the function, the function operates on each of the four points&#8211;
+which results in a counterbore hole at the corners.</p>
+</div>
+<div class="section" id="filleting">
+<h2>Filleting<a class="headerlink" href="#filleting" title="Permalink to this headline">¶</a></h2>
+<p>Almost done. Let&#8217;s just round the corners of the block a bit. That&#8217;s easy, we just need to select the edges
+and then fillet them:</p>
+<p>We can do that using the preset dictionaries in the parameter definition:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">height</span> <span class="o">=</span> <span class="mf">60.0</span>
+ <span class="n">width</span> <span class="o">=</span> <span class="mf">80.0</span>
+ <span class="n">thickness</span> <span class="o">=</span> <span class="mf">10.0</span>
+ <span class="n">diameter</span> <span class="o">=</span> <span class="mf">22.0</span>
+ <span class="n">padding</span> <span class="o">=</span> <span class="mf">12.0</span>
+
+ <span class="c1"># make the base</span>
+ <span class="n">result</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">thickness</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span><span class="o">.</span><span class="n">hole</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span> \
+     <span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">forConstruction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">vertices</span><span class="p">()</span><span class="o">.</span><span class="n">cboreHole</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">)</span>\
+<span class="hll">     <span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s2">&quot;|Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillet</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+</span>
+ <span class="c1"># Render the solid</span>
+ <span class="n">show_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>Line 13</strong> fillets the edges using the   <a class="reference internal" href="classreference.html#cadquery.CQ.fillet" title="cadquery.CQ.fillet"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.fillet()</span></code></a> method.</p>
+<p>To grab the right edges, the <a class="reference internal" href="classreference.html#cadquery.CQ.edges" title="cadquery.CQ.edges"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.edges()</span></code></a> selects all of the
+edges that are parallel to the Z axis (&#8220;|Z&#8221;),</p>
+<p>The finished product looks like this:</p>
+<blockquote>
+<div><img alt="_images/005.png" src="_images/005.png" />
+</div></blockquote>
+</div>
+<div class="section" id="done">
+<h2>Done!<a class="headerlink" href="#done" title="Permalink to this headline">¶</a></h2>
+<p>You just made a parametric, model that can generate pretty much any bearing pillow block
+with &lt; 20 lines of code.</p>
+</div>
+<div class="section" id="want-to-learn-more">
+<h2>Want to learn more?<a class="headerlink" href="#want-to-learn-more" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Use the CadQuery-&gt;Examples menu of the cadquery workbench to explore a lot of other examples.</li>
+<li>The <a class="reference internal" href="examples.html#examples"><span>CadQuery Examples</span></a> contains lots of examples demonstrating cadquery features</li>
+<li>The <a class="reference internal" href="apireference.html#apireference"><span>CadQuery API Reference</span></a> is a good overview of language features grouped by function</li>
+<li>The <a class="reference internal" href="classreference.html#classreference"><span>CadQuery Class Summary</span></a> is the hard-core listing of all functions available.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="designprinciples.html" class="btn btn-neutral float-right" title="CadQuery Design Principles" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installing CadQuery" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

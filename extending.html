@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Extending CadQuery &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="next" title="RoadMap: Planned Features" href="roadmap.html"/>
+        <link rel="prev" title="The CadQuery Gateway Interface" href="cqgi.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Extending CadQuery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-freecad-script">Using FreeCAD Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extending-cadquery-plugins">Extending CadQuery: Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-stack">The Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preserving-the-chain">Preserving the Chain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-methods">Helper Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coordinate-systems">Coordinate Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linking-in-your-plugin">Linking in your plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cadqueryexample-plugins">CadQueryExample Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugin-example">Plugin Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Extending CadQuery</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="extending-cadquery">
+<span id="extending"></span><h1>Extending CadQuery<a class="headerlink" href="#extending-cadquery" title="Permalink to this headline">¶</a></h1>
+<p>If you find that CadQuery doesnt suit your needs, you can easily extend it.  CadQuery provides several extension
+methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li>You can load plugins others have developed. This is by far the easiest way to access other code</li>
+<li>you can define your own plugins.</li>
+<li>you can use FreeCAD script directly</li>
+</ul>
+</div></blockquote>
+<div class="section" id="using-freecad-script">
+<h2>Using FreeCAD Script<a class="headerlink" href="#using-freecad-script" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to extend CadQuery is to simply use FreeCAD script inside of your build method.  Just about
+any valid FreeCAD script will execute just fine. For example, this simple CadQuery script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span><span class="o">.</span><span class="n">val</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>is actually equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">Part</span><span class="o">.</span><span class="n">makeBox</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As long as you return a valid FreeCAD Shape, you can use any FreeCAD methods you like. You can even mix and match the
+two. For example, consider this script, which creates a FreeCAD box, but then uses cadquery to select its faces:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">box</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">makeBox</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="n">cq</span> <span class="o">=</span> <span class="n">CQ</span><span class="p">(</span><span class="n">box</span><span class="p">)</span><span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="c1"># returns 6</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="extending-cadquery-plugins">
+<h2>Extending CadQuery: Plugins<a class="headerlink" href="#extending-cadquery-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Though you can get a lot done with FreeCAD, the code gets pretty nasty in a hurry. CadQuery shields you from
+a lot of the complexity of the FreeCAD api.</p>
+<p>You can get the best of both worlds by wrapping your freecad script into a CadQuery plugin.</p>
+<p>A CadQuery plugin is simply a function that is attached to the CadQuery <a class="reference internal" href="classreference.html#cadquery.CQ" title="cadquery.CQ"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ()</span></code></a> or <a class="reference internal" href="classreference.html#cadquery.Workplane" title="cadquery.Workplane"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane()</span></code></a> class.
+When connected, your plugin can be used in the chain just like the built-in functions.</p>
+<p>There are a few key concepts important to understand when building a plugin</p>
+</div>
+<div class="section" id="the-stack">
+<h2>The Stack<a class="headerlink" href="#the-stack" title="Permalink to this headline">¶</a></h2>
+<p>Every CadQuery object has a local stack, which contains a list of items.  The items on the stack will be
+one of these types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>A CadQuery SolidReference object</strong>, which holds a reference to a FreeCAD solid</li>
+<li><strong>A FreeCAD object</strong>, a Vertex, Edge, Wire, Face, Shell, Solid, or Compound</li>
+</ul>
+</div></blockquote>
+<p>The stack is available by using self.objects, and will always contain at least one object.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Objects and points on the stack are <strong>always</strong> in global coordinates.  Similarly, any objects you
+create must be created in terms of global coordinates as well!</p>
+</div>
+</div>
+<div class="section" id="preserving-the-chain">
+<h2>Preserving the Chain<a class="headerlink" href="#preserving-the-chain" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery&#8217;s fluent api relies on the ability to chain calls together one after another. For this to work,
+you must return a valid CadQuery object as a return value.  If you choose not to return a CadQuery object,
+then your plugin will end the chain. Sometimes this is desired for example <a class="reference internal" href="classreference.html#cadquery.CQ.size" title="cadquery.CQ.size"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.size()</span></code></a></p>
+<p>There are two ways you can safely continue the chain:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><strong>return self</strong>  If you simply wish to modify the stack contents, you can simply return a reference to
+self.  This approach is destructive, because the contents of the stack are modified, but it is also the
+simplest.</li>
+<li><a class="reference internal" href="classreference.html#cadquery.CQ.newObject" title="cadquery.CQ.newObject"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.newObject()</span></code></a>  Most of the time, you will want to return a new object.  Using newObject will
+return a new CQ or Workplane object having the stack you specify, and will link this object to the
+previous one.  This preserves the original object and its stack.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="helper-methods">
+<h2>Helper Methods<a class="headerlink" href="#helper-methods" title="Permalink to this headline">¶</a></h2>
+<p>When you implement a CadQuery plugin, you are extending CadQuery&#8217;s base objects.  As a result, you can call any
+CadQuery or Workplane methods from inside of your extension.  You can also call a number of internal methods that
+are designed to aid in plugin creation:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane._makeWireAtPoints()</span></code> will invoke a factory function you supply for all points on the stack,
+and return a properly constructed cadquery object. This function takes care of registering wires for you
+and everything like that</li>
+<li><a class="reference internal" href="classreference.html#cadquery.Workplane.newObject" title="cadquery.Workplane.newObject"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.newObject()</span></code></a> returns a new Workplane object with the provided stack, and with its parent set
+to the current object. The preferred way to continue the chain</li>
+<li><a class="reference internal" href="classreference.html#cadquery.CQ.findSolid" title="cadquery.CQ.findSolid"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.CQ.findSolid()</span></code></a> returns the first Solid found in the chain, working from the current object upwards
+in the chain. commonly used when your plugin will modify an existing solid, or needs to create objects and
+then combine them onto the &#8216;main&#8217; part that is in progress</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane._addPendingWire()</span></code> must be called if you add a wire.  This allows the base class to track all the wires
+that are created, so that they can be managed when extrusion occurs.</li>
+<li><a class="reference internal" href="classreference.html#cadquery.Workplane.wire" title="cadquery.Workplane.wire"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.wire()</span></code></a> gathers up all of the edges that have been drawn ( eg, by line, vline, etc ), and
+attempts to combine them into a single wire, which is returned. This should be used when your plugin creates
+2-d edges, and you know it is time to collect them into a single wire.</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.plane()</span></code> provides a reference to the workplane, which allows you to convert between workplane
+coordinates and global coordinates:
+* <code class="xref py py-meth docutils literal"><span class="pre">cadquery.freecad_impl.geom.Plane.toWorldCoords()</span></code> will convert local coordinates to global ones
+* <code class="xref py py-meth docutils literal"><span class="pre">cadquery.freecad_impl.geom.Plane.toLocalCoords()</span></code> will convet from global coordinates to local coordinates</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="coordinate-systems">
+<h2>Coordinate Systems<a class="headerlink" href="#coordinate-systems" title="Permalink to this headline">¶</a></h2>
+<p>Keep in mind that the user may be using a work plane that has created a local coordinate system. Consequently,
+the orientation of shapes that you create are often implicitly defined by the user&#8217;s workplane.</p>
+<p>Any objects that you create must be fully defined in <em>global coordinates</em>, even though some or all of the users&#8217;
+inputs may be defined in terms of local coordinates.</p>
+</div>
+<div class="section" id="linking-in-your-plugin">
+<h2>Linking in your plugin<a class="headerlink" href="#linking-in-your-plugin" title="Permalink to this headline">¶</a></h2>
+<p>Your plugin is a single method, which is attached to the main Workplane or CadQuery object.</p>
+<p>Your plugin method&#8217;s first parameter should be &#8216;self&#8217;, which will provide a reference to base class functionality.
+You can also accept other arguments.</p>
+<p>To install it, simply attach it to the CadQuery or Workplane object, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>def _yourFunction(self,arg1,arg):
+    do stuff
+    return whatever_you_want
+
+cq.Workplane.yourPlugin = _yourFunction
+</pre></div>
+</div>
+<p>That&#8217;s it!</p>
+</div>
+<div class="section" id="cadqueryexample-plugins">
+<h2>CadQueryExample Plugins<a class="headerlink" href="#cadqueryexample-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Some core cadquery code is intentionally written exactly like a plugin.
+If you are writing your own plugins, have a look at these methods for inspiration:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="classreference.html#cadquery.Workplane.polygon" title="cadquery.Workplane.polygon"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.polygon()</span></code></a></li>
+<li><a class="reference internal" href="classreference.html#cadquery.Workplane.cboreHole" title="cadquery.Workplane.cboreHole"><code class="xref py py-meth docutils literal"><span class="pre">cadquery.Workplane.cboreHole()</span></code></a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="plugin-example">
+<h2>Plugin Example<a class="headerlink" href="#plugin-example" title="Permalink to this headline">¶</a></h2>
+<p>This ultra simple plugin makes cubes of the specified size for each stack point.</p>
+<p>(The cubes are off-center because the boxes have their lower left corner at the reference points.)</p>
+<div class="cq" style="text-align:left;float:left;">
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg   xmlns:svg="http://www.w3.org/2000/svg"   xmlns="http://www.w3.org/2000/svg"   width="800.0"   height="240.0">    <g transform="scale(21.6038557671, -21.6038557671)   translate(12.1717693801,-5.09168368768)" stroke-width="0.0462880335243"  fill="none">       <!-- hidden lines -->       <g  stroke="rgb(160, 160, 160)" fill="none" stroke-dasharray="0.0462880335243,0.0462880335243" >			<path d=" M -2.91416 -4.06997 L 2.74899 -3.66699 " />			<path d=" M 2.74899 -3.66699 L 2.91416 -3.76294 " />			<path d=" M 1.9703 2.04458 L 2.91416 2.11175 " />			<path d=" M 2.91416 1.89634 L 2.91416 2.11175 " />			<path d=" M 2.91416 -2.02012 L 2.91416 -1.80471 " />			<path d=" M 1.9703 -1.87187 L 2.91416 -1.80471 " />			<path d=" M -1.80513 -2.14053 L -0.861271 -2.07337 " />			<path d=" M -0.861271 -2.07337 L -0.861271 -1.09425 " />			<path d=" M -1.80513 1.77593 L -0.861271 1.84309 " />			<path d=" M -0.861271 1.84309 L -0.861271 2.8222 " />			<path d=" M 2.74899 -3.66699 L 2.74899 4.16592 " />			<path d=" M 2.91416 -1.80471 L 2.91416 -0.825596 " />			<path d=" M 2.91416 2.11175 L 2.91416 3.09086 " />			<path d=" M 2.91416 2.11175 L 3.24451 1.91985 " />			<path d=" M 2.91416 -1.80471 L 3.24451 -1.99661 " />			<path d=" M -0.861271 -2.07337 L -0.53092 -2.26526 " />			<path d=" M -0.861271 1.84309 L -0.53092 1.65119 " />       </g>       <!-- solid lines -->       <g  stroke="rgb(0, 0, 0)" fill="none">			<path d=" M -2.91416 -4.06997 L -2.74899 -4.16592 " />			<path d=" M -2.74899 -4.16592 L -2.74899 3.66699 " />			<path d=" M -2.91416 3.76294 L -2.74899 3.66699 " />			<path d=" M -2.91416 -4.06997 L -2.91416 3.76294 " />			<path d=" M -2.74899 -4.16592 L 2.91416 -3.76294 " />			<path d=" M 2.91416 3.09086 L 2.91416 4.06997 " />			<path d=" M 1.9703 3.0237 L 2.91416 3.09086 " />			<path d=" M -2.74899 3.66699 L 2.91416 4.06997 " />			<path d=" M 1.9703 2.04458 L 1.9703 3.0237 " />			<path d=" M 2.91416 -0.825596 L 2.91416 1.89634 " />			<path d=" M 2.91416 -3.76294 L 2.91416 -2.02012 " />			<path d=" M 1.9703 -0.89276 L 2.91416 -0.825596 " />			<path d=" M 1.9703 -1.87187 L 1.9703 -0.89276 " />			<path d=" M -1.80513 -2.14053 L -1.80513 -1.16142 " />			<path d=" M -1.80513 -1.16142 L -0.861271 -1.09425 " />			<path d=" M -1.80513 1.77593 L -1.80513 2.75504 " />			<path d=" M -1.80513 2.75504 L -0.861271 2.8222 " />			<path d=" M -2.91416 3.76294 L 2.74899 4.16592 " />			<path d=" M 2.74899 4.16592 L 2.91416 4.06997 " />			<path d=" M 2.91416 3.09086 L 3.24451 2.89896 " />			<path d=" M 1.9703 3.0237 L 2.30065 2.8318 " />			<path d=" M 2.30065 2.8318 L 3.24451 2.89896 " />			<path d=" M 1.9703 2.04458 L 2.30065 1.85268 " />			<path d=" M 2.30065 1.85268 L 2.30065 2.8318 " />			<path d=" M 2.30065 1.85268 L 3.24451 1.91985 " />			<path d=" M 2.91416 -0.825596 L 3.24451 -1.01749 " />			<path d=" M 1.9703 -0.89276 L 2.30065 -1.08466 " />			<path d=" M 2.30065 -1.08466 L 3.24451 -1.01749 " />			<path d=" M 1.9703 -1.87187 L 2.30065 -2.06377 " />			<path d=" M 2.30065 -2.06377 L 3.24451 -1.99661 " />			<path d=" M 2.30065 -2.06377 L 2.30065 -1.08466 " />			<path d=" M -1.80513 -2.14053 L -1.47478 -2.33243 " />			<path d=" M -1.47478 -2.33243 L -1.47478 -1.35331 " />			<path d=" M -1.80513 -1.16142 L -1.47478 -1.35331 " />			<path d=" M -0.861271 -1.09425 L -0.53092 -1.28615 " />			<path d=" M -1.47478 -1.35331 L -0.53092 -1.28615 " />			<path d=" M -1.47478 -2.33243 L -0.53092 -2.26526 " />			<path d=" M -0.53092 -2.26526 L -0.53092 -1.28615 " />			<path d=" M -1.80513 1.77593 L -1.47478 1.58403 " />			<path d=" M -1.47478 1.58403 L -1.47478 2.56314 " />			<path d=" M -1.80513 2.75504 L -1.47478 2.56314 " />			<path d=" M -1.47478 1.58403 L -0.53092 1.65119 " />			<path d=" M -0.53092 1.65119 L -0.53092 2.63031 " />			<path d=" M -0.861271 2.8222 L -0.53092 2.63031 " />			<path d=" M -1.47478 2.56314 L -0.53092 2.63031 " />			<path d=" M 3.24451 -1.99661 L 3.24451 -1.01749 " />			<path d=" M 3.24451 1.91985 L 3.24451 2.89896 " />       </g>    </g></svg>
+</div>
+<div style="clear:both;">
+</div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeCubes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">length</span><span class="p">):</span>
+    <span class="c1">#self refers to the CQ or Workplane object</span>
+
+    <span class="c1">#inner method that creates a cube</span>
+    <span class="k">def</span> <span class="nf">_singleCube</span><span class="p">(</span><span class="n">pnt</span><span class="p">):</span>
+        <span class="c1">#pnt is a location in local coordinates</span>
+        <span class="c1">#since we&#39;re using eachpoint with useLocalCoordinates=True</span>
+        <span class="k">return</span> <span class="n">cq</span><span class="o">.</span><span class="n">Solid</span><span class="o">.</span><span class="n">makeBox</span><span class="p">(</span><span class="n">length</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">pnt</span><span class="p">)</span>
+
+    <span class="c1">#use CQ utility method to iterate over the stack, call our</span>
+    <span class="c1">#method, and convert to/from local coordinates.</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eachpoint</span><span class="p">(</span><span class="n">_singleCube</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1">#link the plugin into cadQuery</span>
+<span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="o">.</span><span class="n">makeCubes</span> <span class="o">=</span> <span class="n">makeCubes</span>
+
+<span class="c1">#use the plugin</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">8.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">4.0</span><span class="p">,</span><span class="n">forConstruction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">vertices</span><span class="p">()</span> \
+    <span class="o">.</span><span class="n">makeCubes</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">combineSolids</span><span class="p">()</span>
+<span class="n">show_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="roadmap.html" class="btn btn-neutral float-right" title="RoadMap: Planned Features" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cqgi.html" class="btn btn-neutral" title="The CadQuery Gateway Interface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

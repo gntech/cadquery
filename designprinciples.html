@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CadQuery Design Principles &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="next" title="CadQuery Concepts" href="primer.html"/>
+        <link rel="prev" title="CadQuery QuickStart" href="quickstart.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">CadQuery Design Principles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#principle-1-intuitive-construction">Principle 1: Intuitive Construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principle-2-capture-design-intent">Principle 2: Capture Design Intent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principle-3-plugins-as-first-class-citizens">Principle 3: Plugins as first class citizens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principle-4-cad-models-as-source-code-makes-sense">Principle 4: CAD models as source code makes sense</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>CadQuery Design Principles</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cadquery-design-principles">
+<span id="designprinciples"></span><h1>CadQuery Design Principles<a class="headerlink" href="#cadquery-design-principles" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principle-1-intuitive-construction">
+<h2>Principle 1: Intuitive Construction<a class="headerlink" href="#principle-1-intuitive-construction" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery aims to make building models using python scripting easy and intuitive.
+CadQuery strives to allow scripts to read roughly as a human would describe an object verbally.</p>
+<p>For example, consider this object:</p>
+<img alt="_images/quickstart.png" src="_images/quickstart.png" />
+<p>A human would describe this as:</p>
+<blockquote>
+<div>&#8220;A block 80mm square x 30mm thick , with countersunk holes for M2 socket head cap screws
+at the corners, and a circular pocket 22mm in diameter in the middle for a bearing&#8221;</div></blockquote>
+<p>The goal is to have the CadQuery script that produces this object be as close as possible to the english phrase
+a human would use.</p>
+</div>
+<div class="section" id="principle-2-capture-design-intent">
+<h2>Principle 2: Capture Design Intent<a class="headerlink" href="#principle-2-capture-design-intent" title="Permalink to this headline">¶</a></h2>
+<p>The features that are <strong>not</strong> part of the part description above are just as important as those that are.  For example, most
+humans will assume that:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The countersunk holes are spaced a uniform distance from the edges</li>
+<li>The circular pocket is in the center of the block, no matter how big the block is</li>
+</ul>
+</div></blockquote>
+<p>If you have experience with 3D CAD systems, you also know that there is a key design intent built into this object.
+After the base block is created, how the hole is located is key.  If it is located from one edge, changing the block
+size will have a different affect than if the hole is located from the center.</p>
+<p>Many scripting langauges do not provide a way to capture design intent&#8211; because they require that you always work in
+global coordinates.  CadQuery is different&#8211; you can locate features relative to others in a relative way&#8211; preserving
+the design intent just like a human would when creating a drawing or building an object.</p>
+<p>In fact, though many people know how to use 3D CAD systems, few understand how important the way that an object is built
+impact its maintainability and resiliency to design changes.</p>
+</div>
+<div class="section" id="principle-3-plugins-as-first-class-citizens">
+<h2>Principle 3: Plugins as first class citizens<a class="headerlink" href="#principle-3-plugins-as-first-class-citizens" title="Permalink to this headline">¶</a></h2>
+<p>Any system for building 3D models will evolve to contain an immense number of libraries and feature builders. It is
+important that these can be seamlessly included into the core and used alongside the built in libraries.  Plugins
+should be easy to install and familiar to use.</p>
+</div>
+<div class="section" id="principle-4-cad-models-as-source-code-makes-sense">
+<h2>Principle 4: CAD models as source code makes sense<a class="headerlink" href="#principle-4-cad-models-as-source-code-makes-sense" title="Permalink to this headline">¶</a></h2>
+<p>It is surprising that the world of 3D CAD is primarily dominated by systems that create opaque binary files.
+Just like the world of software, CAD models are very complex.</p>
+<p>CAD models have many things in common with software, and would benefit greatly from the use of tools that are standard
+in the software industry, such as:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Easily re-using features between objects</li>
+<li>Storing objects using version control systems</li>
+<li>Computing the differences between objects by using source control tools</li>
+<li>Share objects on the internet</li>
+<li>Automate testing and generation by allowing objects to be built from within libraries</li>
+</ol>
+</div></blockquote>
+<p>CadQuery is designed to make 3D content creation easy enough that the above benefits can be attained without more work
+than using existing &#8216;opaque&#8217;, &#8216;point and click&#8217; solutions.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="primer.html" class="btn btn-neutral float-right" title="CadQuery Concepts" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral" title="CadQuery QuickStart" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

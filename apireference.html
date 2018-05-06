@@ -1,0 +1,569 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CadQuery API Reference &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="next" title="String Selectors Reference" href="selectors.html"/>
+        <link rel="prev" title="CadQuery Examples" href="examples.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">CadQuery API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#d-operations">2-d Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3-d Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-management-and-export">File Management and Export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iteration-methods">Iteration Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stack-and-selector-methods">Stack and Selector Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#selectors">Selectors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>CadQuery API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cadquery-api-reference">
+<span id="apireference"></span><h1>CadQuery API Reference<a class="headerlink" href="#cadquery-api-reference" title="Permalink to this headline">¶</a></h1>
+<p>The CadQuery API is made up of 3 main objects:</p>
+<ul class="simple">
+<li><strong>CQ</strong> -  An object that wraps a topological entity.</li>
+<li><strong>Workplane</strong> &#8211; A subclass of CQ, that applies in a 2-D modelling context.</li>
+<li><strong>Selector</strong> &#8211; Filter and select things</li>
+</ul>
+<p>This page lists  methods of these objects grouped by <strong>functional area</strong></p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">This page lists api methods grouped by functional area.
+Use <a class="reference internal" href="classreference.html#classreference"><span>CadQuery Class Summary</span></a> to see methods alphabetically by class.</p>
+</div>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<p>Creating new workplanes and object chains</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ" title="cadquery.CQ"><code class="xref py py-obj docutils literal"><span class="pre">CQ</span></code></a>(obj)</td>
+<td>Provides enhanced functionality for a wrapped CAD primitive.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane" title="cadquery.Workplane"><code class="xref py py-obj docutils literal"><span class="pre">Workplane</span></code></a>(inPlane[,&nbsp;origin,&nbsp;obj])</td>
+<td>Defines a coordinate system in space, in which 2-d coordinates can be used.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="d-operations">
+<span id="doperations"></span><h2>2-d Operations<a class="headerlink" href="#d-operations" title="Permalink to this headline">¶</a></h2>
+<p>Creating 2-d constructs that can be used to create 3 d features.</p>
+<p>All 2-d operations require a <strong>Workplane</strong> object to be created.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.center" title="cadquery.Workplane.center"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.center</span></code></a>(x,&nbsp;y)</td>
+<td>Shift local coordinates to the specified location.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.lineTo" title="cadquery.Workplane.lineTo"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.lineTo</span></code></a>(x,&nbsp;y[,&nbsp;forConstruction])</td>
+<td>Make a line from the current point to the provided point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.line" title="cadquery.Workplane.line"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.line</span></code></a>(xDist,&nbsp;yDist[,&nbsp;forConstruction])</td>
+<td>Make a line from the current point to the provided point, using</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.vLine" title="cadquery.Workplane.vLine"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.vLine</span></code></a>(distance[,&nbsp;forConstruction])</td>
+<td>Make a vertical line from the current point the provided distance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.vLineTo" title="cadquery.Workplane.vLineTo"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.vLineTo</span></code></a>(yCoord[,&nbsp;forConstruction])</td>
+<td>Make a vertical line from the current point to the provided y coordinate.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.hLine" title="cadquery.Workplane.hLine"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.hLine</span></code></a>(distance[,&nbsp;forConstruction])</td>
+<td>Make a horizontal line from the current point the provided distance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.moveTo" title="cadquery.Workplane.moveTo"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.moveTo</span></code></a>([x,&nbsp;y])</td>
+<td>Move to the specified point, without drawing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.move" title="cadquery.Workplane.move"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.move</span></code></a>([xDist,&nbsp;yDist])</td>
+<td>Move the specified distance from the current point, without drawing.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.spline" title="cadquery.Workplane.spline"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.spline</span></code></a>(listOfXYTuple[,&nbsp;...])</td>
+<td>Create a spline interpolated through the provided points.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.threePointArc" title="cadquery.Workplane.threePointArc"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.threePointArc</span></code></a>(point1,&nbsp;point2[,&nbsp;...])</td>
+<td>Draw an arc from the current point, through point1, and ending at point2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.rotateAndCopy" title="cadquery.Workplane.rotateAndCopy"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.rotateAndCopy</span></code></a>(matrix)</td>
+<td>Makes a copy of all edges on the stack, rotates them according to the provided matrix, and then attempts to consolidate them into a single wire.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.mirrorY" title="cadquery.Workplane.mirrorY"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.mirrorY</span></code></a>()</td>
+<td>Mirror entities around the y axis of the workplane plane.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.mirrorX" title="cadquery.Workplane.mirrorX"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.mirrorX</span></code></a>()</td>
+<td>Mirror entities around the x axis of the workplane plane.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.wire" title="cadquery.Workplane.wire"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.wire</span></code></a>([forConstruction])</td>
+<td>Returns a CQ object with all pending edges connected into a wire.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.rect" title="cadquery.Workplane.rect"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.rect</span></code></a>(xLen,&nbsp;yLen[,&nbsp;centered,&nbsp;...])</td>
+<td>Make a rectangle for each item on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.circle" title="cadquery.Workplane.circle"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.circle</span></code></a>(radius[,&nbsp;forConstruction])</td>
+<td>Make a circle for each item on the stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.polyline" title="cadquery.Workplane.polyline"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.polyline</span></code></a>(listOfXYTuple[,&nbsp;...])</td>
+<td>Create a polyline from a list of points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.close" title="cadquery.Workplane.close"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.close</span></code></a>()</td>
+<td>End 2-d construction, and attempt to build a closed wire.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.rarray" title="cadquery.Workplane.rarray"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.rarray</span></code></a>(xSpacing,&nbsp;ySpacing,&nbsp;xCount,&nbsp;...)</td>
+<td>Creates an array of points and pushes them onto the stack.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id1">
+<span id="id2"></span><h2>3-d Operations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Some 3-d operations also require an active 2-d workplane, but some do not.</p>
+<p>3-d operations that require a 2-d workplane to be active:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.cboreHole" title="cadquery.Workplane.cboreHole"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.cboreHole</span></code></a>(diameter,&nbsp;cboreDiameter,&nbsp;...)</td>
+<td>Makes a counterbored hole for each item on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.cskHole" title="cadquery.Workplane.cskHole"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.cskHole</span></code></a>(diameter,&nbsp;cskDiameter,&nbsp;...)</td>
+<td>Makes a countersunk hole for each item on the stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.hole" title="cadquery.Workplane.hole"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.hole</span></code></a>(diameter[,&nbsp;depth,&nbsp;clean])</td>
+<td>Makes a hole for each item on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.extrude" title="cadquery.Workplane.extrude"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.extrude</span></code></a>(distance[,&nbsp;combine,&nbsp;...])</td>
+<td>Use all un-extruded wires in the parent chain to create a prismatic solid.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.cut" title="cadquery.Workplane.cut"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.cut</span></code></a>(toCut[,&nbsp;combine,&nbsp;clean])</td>
+<td>Cuts the provided solid from the current solid, IE, perform a solid subtraction</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.cutBlind" title="cadquery.Workplane.cutBlind"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.cutBlind</span></code></a>(distanceToCut[,&nbsp;clean])</td>
+<td>Use all un-extruded wires in the parent chain to create a prismatic cut from existing solid.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.cutThruAll" title="cadquery.Workplane.cutThruAll"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.cutThruAll</span></code></a>([positive,&nbsp;clean])</td>
+<td>Use all un-extruded wires in the parent chain to create a prismatic cut from existing solid.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.box" title="cadquery.Workplane.box"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.box</span></code></a>(length,&nbsp;width,&nbsp;height[,&nbsp;...])</td>
+<td>Return a 3d box with specified dimensions for each object on the stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.union" title="cadquery.Workplane.union"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.union</span></code></a>([toUnion,&nbsp;combine,&nbsp;clean])</td>
+<td>Unions all of the items on the stack of toUnion with the current solid.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.combine" title="cadquery.Workplane.combine"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.combine</span></code></a>([clean])</td>
+<td>Attempts to combine all of the items on the stack into a single item.</td>
+</tr>
+</tbody>
+</table>
+<p>3-d operations that do NOT require a 2-d workplane to be active:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.shell" title="cadquery.CQ.shell"><code class="xref py py-obj docutils literal"><span class="pre">CQ.shell</span></code></a>(thickness)</td>
+<td>Remove the selected faces to create a shell of the specified thickness.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.fillet" title="cadquery.CQ.fillet"><code class="xref py py-obj docutils literal"><span class="pre">CQ.fillet</span></code></a>(radius)</td>
+<td>Fillets a solid on the selected edges.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.split" title="cadquery.CQ.split"><code class="xref py py-obj docutils literal"><span class="pre">CQ.split</span></code></a>([keepTop,&nbsp;keepBottom])</td>
+<td>Splits a solid on the stack into two parts, optionally keeping the separate parts.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.rotate" title="cadquery.CQ.rotate"><code class="xref py py-obj docutils literal"><span class="pre">CQ.rotate</span></code></a>(axisStartPoint,&nbsp;axisEndPoint,&nbsp;...)</td>
+<td>Returns a copy of all of the items on the stack rotated through and angle around the axis of rotation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.rotateAboutCenter" title="cadquery.CQ.rotateAboutCenter"><code class="xref py py-obj docutils literal"><span class="pre">CQ.rotateAboutCenter</span></code></a>(axisEndPoint,&nbsp;angleDegrees)</td>
+<td>Rotates all items on the stack by the specified angle, about the specified axis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.translate" title="cadquery.CQ.translate"><code class="xref py py-obj docutils literal"><span class="pre">CQ.translate</span></code></a>(vec)</td>
+<td>Returns a copy of all of the items on the stack moved by the specified translation vector.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="file-management-and-export">
+<h2>File Management and Export<a class="headerlink" href="#file-management-and-export" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.toSvg" title="cadquery.CQ.toSvg"><code class="xref py py-obj docutils literal"><span class="pre">CQ.toSvg</span></code></a>([opts,&nbsp;view_vector])</td>
+<td>Returns svg text that represents the first item on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.exportSvg" title="cadquery.CQ.exportSvg"><code class="xref py py-obj docutils literal"><span class="pre">CQ.exportSvg</span></code></a>(fileName[,&nbsp;view_vector])</td>
+<td>Exports the first item on the stack as an SVG file</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">importers.importStep</span></code>(fileName)</td>
+<td>Accepts a file name and loads the STEP file into a cadquery shape</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">exporters.exportShape</span></code>(shape,&nbsp;exportType,&nbsp;...)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param shape:</th><td class="field-body">the shape to export. it can be a shape object, or a cadquery object. If a cadquery</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="iteration-methods">
+<h2>Iteration Methods<a class="headerlink" href="#iteration-methods" title="Permalink to this headline">¶</a></h2>
+<p>Methods that allow iteration over the stack or objects</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.each" title="cadquery.Workplane.each"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.each</span></code></a>(callBackFunction[,&nbsp;...])</td>
+<td>Runs the provided function on each value in the stack, and collects the return values into a new CQ object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.Workplane.eachpoint" title="cadquery.Workplane.eachpoint"><code class="xref py py-obj docutils literal"><span class="pre">Workplane.eachpoint</span></code></a>(callbackFunction[,&nbsp;...])</td>
+<td>Same as each(), except each item on the stack is converted into a point before it is passed into the callback function.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="stack-and-selector-methods">
+<span id="stackmethods"></span><h2>Stack and Selector Methods<a class="headerlink" href="#stack-and-selector-methods" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery methods that operate on the stack</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.all" title="cadquery.CQ.all"><code class="xref py py-obj docutils literal"><span class="pre">CQ.all</span></code></a>()</td>
+<td>Return a list of all CQ objects on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.size" title="cadquery.CQ.size"><code class="xref py py-obj docutils literal"><span class="pre">CQ.size</span></code></a>()</td>
+<td>Return the number of objects currently on the stack</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.vals" title="cadquery.CQ.vals"><code class="xref py py-obj docutils literal"><span class="pre">CQ.vals</span></code></a>()</td>
+<td>get the values in the current list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.add" title="cadquery.CQ.add"><code class="xref py py-obj docutils literal"><span class="pre">CQ.add</span></code></a>(obj)</td>
+<td>Adds an object or a list of objects to the stack</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.val" title="cadquery.CQ.val"><code class="xref py py-obj docutils literal"><span class="pre">CQ.val</span></code></a>()</td>
+<td>Return the first value on the stack</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.first" title="cadquery.CQ.first"><code class="xref py py-obj docutils literal"><span class="pre">CQ.first</span></code></a>()</td>
+<td>Return the first item on the stack :returns: the first item on the stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.item" title="cadquery.CQ.item"><code class="xref py py-obj docutils literal"><span class="pre">CQ.item</span></code></a>(i)</td>
+<td>Return the ith item on the stack.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.last" title="cadquery.CQ.last"><code class="xref py py-obj docutils literal"><span class="pre">CQ.last</span></code></a>()</td>
+<td>Return the last item on the stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.end" title="cadquery.CQ.end"><code class="xref py py-obj docutils literal"><span class="pre">CQ.end</span></code></a>()</td>
+<td>Return the parent of this CQ element :rtype: a CQ object :raises: ValueError if there are no more parents in the chain.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.vertices" title="cadquery.CQ.vertices"><code class="xref py py-obj docutils literal"><span class="pre">CQ.vertices</span></code></a>([selector])</td>
+<td>Select the vertices of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.faces" title="cadquery.CQ.faces"><code class="xref py py-obj docutils literal"><span class="pre">CQ.faces</span></code></a>([selector])</td>
+<td>Select the faces of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.edges" title="cadquery.CQ.edges"><code class="xref py py-obj docutils literal"><span class="pre">CQ.edges</span></code></a>([selector])</td>
+<td>Select the edges of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.wires" title="cadquery.CQ.wires"><code class="xref py py-obj docutils literal"><span class="pre">CQ.wires</span></code></a>([selector])</td>
+<td>Select the wires of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.solids" title="cadquery.CQ.solids"><code class="xref py py-obj docutils literal"><span class="pre">CQ.solids</span></code></a>([selector])</td>
+<td>Select the solids of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.CQ.shells" title="cadquery.CQ.shells"><code class="xref py py-obj docutils literal"><span class="pre">CQ.shells</span></code></a>([selector])</td>
+<td>Select the shells of objects on the stack, optionally filtering the selection.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.CQ.compounds" title="cadquery.CQ.compounds"><code class="xref py py-obj docutils literal"><span class="pre">CQ.compounds</span></code></a>([selector])</td>
+<td>Select compounds on the stack, optionally filtering the selection.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="selectors">
+<span id="id3"></span><h2>Selectors<a class="headerlink" href="#selectors" title="Permalink to this headline">¶</a></h2>
+<p>Objects that filter and select CAD objects. Selectors are used to select existing geometry
+as a basis for futher operations.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.NearestToPointSelector" title="cadquery.NearestToPointSelector"><code class="xref py py-obj docutils literal"><span class="pre">NearestToPointSelector</span></code></a>(pnt)</td>
+<td>Selects object nearest the provided point.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">BoxSelector</span></code>(point0,&nbsp;point1[,&nbsp;boundingbox])</td>
+<td>Selects objects inside the 3D box defined by 2 points.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">BaseDirSelector</span></code>(vector[,&nbsp;tolerance])</td>
+<td>A selector that handles selection on the basis of a single</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.ParallelDirSelector" title="cadquery.ParallelDirSelector"><code class="xref py py-obj docutils literal"><span class="pre">ParallelDirSelector</span></code></a>(vector[,&nbsp;tolerance])</td>
+<td>Selects objects parallel with the provided direction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.DirectionSelector" title="cadquery.DirectionSelector"><code class="xref py py-obj docutils literal"><span class="pre">DirectionSelector</span></code></a>(vector[,&nbsp;tolerance])</td>
+<td>Selects objects aligned with the provided direction</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">DirectionNthSelector</span></code>(vector,&nbsp;n[,&nbsp;...])</td>
+<td>Selects nth object parallel (or normal) to the specified direction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.PerpendicularDirSelector" title="cadquery.PerpendicularDirSelector"><code class="xref py py-obj docutils literal"><span class="pre">PerpendicularDirSelector</span></code></a>(vector[,&nbsp;tolerance])</td>
+<td>Selects objects perpendicular with the provided direction</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="classreference.html#cadquery.TypeSelector" title="cadquery.TypeSelector"><code class="xref py py-obj docutils literal"><span class="pre">TypeSelector</span></code></a>(typeString)</td>
+<td>Selects objects of the prescribed topological type.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.DirectionMinMaxSelector" title="cadquery.DirectionMinMaxSelector"><code class="xref py py-obj docutils literal"><span class="pre">DirectionMinMaxSelector</span></code></a>(vector[,&nbsp;...])</td>
+<td>Selects objects closest or farthest in the specified direction</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">BinarySelector</span></code>(left,&nbsp;right)</td>
+<td>Base class for selectors that operates with two other selectors.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">AndSelector</span></code>(left,&nbsp;right)</td>
+<td>Intersection selector.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">SumSelector</span></code>(left,&nbsp;right)</td>
+<td>Union selector.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">SubtractSelector</span></code>(left,&nbsp;right)</td>
+<td>Difference selector.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">InverseSelector</span></code>(selector)</td>
+<td>Inverts the selection of given selector.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classreference.html#cadquery.StringSyntaxSelector" title="cadquery.StringSyntaxSelector"><code class="xref py py-obj docutils literal"><span class="pre">StringSyntaxSelector</span></code></a>(selectorString)</td>
+<td>Filter lists objects using a simple string syntax.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="selectors.html" class="btn btn-neutral float-right" title="String Selectors Reference" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="examples.html" class="btn btn-neutral" title="CadQuery Examples" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

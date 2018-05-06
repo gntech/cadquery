@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; CadQuery Documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="CadQuery Documentation" href="index.html"/>
+        <link rel="next" title="Installing CadQuery" href="installation.html"/>
+        <link rel="prev" title="CadQuery Documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CadQuery
+          
+
+          
+            
+            <img src="_static/cadquery_logo_dark.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">What is CadQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cadquery-is-a-library-guis-are-separate">CadQuery is a library,  GUIs are separate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-cadquery-instead-of-openscad">Why CadQuery instead of OpenSCAD?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-does-the-name-cadquery-come-from">Where does the name CadQuery come from?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">CadQuery QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="designprinciples.html">CadQuery Design Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="primer.html">CadQuery Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileformat.html">CadQuery Scripts and Object Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">CadQuery Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">CadQuery API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html">String Selectors Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selectors.html#combining-selectors">Combining Selectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classreference.html">CadQuery Class Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cqgi.html">The CadQuery Gateway Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending CadQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">RoadMap:  Planned Features</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CadQuery</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<span id="what-is-cadquery"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>What is CadQuery<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery is an intuitive, easy-to-use python library for building parametric 3D CAD models.  It has several goals:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Build models with scripts that are as close as possible to how you&#8217;d describe the object to a human,
+using a standard, already established programming language</li>
+<li>Create parametric models that can be very easily customized by end users</li>
+<li>Output high quality CAD formats like STEP and AMF in addition to traditional STL</li>
+<li>Provide a non-proprietary, plain text model format that can be edited and executed with only a web browser</li>
+</ul>
+</div></blockquote>
+<p>CadQuery is based on
+<a class="reference external" href="http://sourceforge.net/apps/mediawiki/free-cad/index.php?title=Main_Page">FreeCAD</a>,
+which is turn based on the open-source <a class="reference external" href="http://www.opencascade.com/">OpenCascade</a> modelling kernel.</p>
+<p>Using CadQuery, you can build fully parametric models with a very small amount of code. For example, this simple script
+produces a flat plate with a hole in the middle:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">thickness</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">width</span><span class="o">=</span><span class="mf">2.0</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;front&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">width</span><span class="p">,</span><span class="n">thickness</span><span class="p">)</span><span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">hole</span><span class="p">(</span><span class="n">thickness</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/simpleblock.png" src="_images/simpleblock.png" />
+<p>That is a simple example, but it is similar to a more useful part: a parametric pillow block for a
+standard 608-size ball bearing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">length</span><span class="p">,</span><span class="n">height</span><span class="p">,</span><span class="n">diam</span><span class="p">,</span> <span class="n">thickness</span><span class="p">,</span><span class="n">padding</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span> <span class="mf">30.0</span><span class="p">,</span><span class="mf">40.0</span><span class="p">,</span><span class="mf">22.0</span><span class="p">,</span><span class="mf">10.0</span><span class="p">,</span><span class="mf">8.0</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">Workplane</span><span class="p">(</span><span class="s2">&quot;XY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">length</span><span class="p">,</span><span class="n">height</span><span class="p">,</span><span class="n">thickness</span><span class="p">)</span><span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span><span class="o">.</span><span class="n">hole</span><span class="p">(</span><span class="n">diam</span><span class="p">)</span>\
+        <span class="o">.</span><span class="n">faces</span><span class="p">(</span><span class="s2">&quot;&gt;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">workplane</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">length</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span><span class="n">height</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span><span class="n">forConstruction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">vertices</span><span class="p">()</span><span class="o">.</span><span class="n">cboreHole</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">4.4</span><span class="p">,</span><span class="mf">2.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pillowblock.png" src="_images/pillowblock.png" />
+<p>Many examples are available in the <a class="reference internal" href="examples.html#examples"><span>CadQuery Examples</span></a></p>
+</div>
+<div class="section" id="cadquery-is-a-library-guis-are-separate">
+<h2>CadQuery is a library,  GUIs are separate<a class="headerlink" href="#cadquery-is-a-library-guis-are-separate" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery is a library, that&#8217;s intentionally designed to be usable as a GUI-less library. This enables
+its use in a variety of engineering and scientific applications that create 3d models programmatically.</p>
+<p>If you would like a GUI, you have a couple of options:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Install cadquery as a part of <a class="reference external" href="https://github.com/jmwright/cadquery-freecad-module">The CadQuery Freecad Module</a></li>
+<li>Use <a class="reference external" href="https://mybinder.org/v2/gh/RustyVermeer/tryCQ/master">tryCQ</a>, a Jupyter Notebook server using <a class="reference external" href="https://mybinder.org/">mybinder.org</a>. This solution runs entirely in your browser.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="why-cadquery-instead-of-openscad">
+<h2>Why CadQuery instead of OpenSCAD?<a class="headerlink" href="#why-cadquery-instead-of-openscad" title="Permalink to this headline">¶</a></h2>
+<p>Like OpenSCAD, CadQuery is an open-source, script based, parametric model generator. However, CadQuery stands out in many ways and has several key advantages:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><strong>The scripts use a standard programming language</strong>, python, and thus can benefit from the associated infrastructure.
+This includes many standard libraries and IDEs</li>
+<li><strong>More powerful CAD kernel</strong> OpenCascade is much more powerful than CGAL. Features supported natively
+by OCC include NURBS, splines, surface sewing, STL repair, STEP import/export,  and other complex operations,
+in addition to the standard CSG operations supported by CGAL</li>
+<li><strong>Ability to import/export STEP</strong> the ability to begin with a STEP model, created in a CAD package,
+and then add parametric features is key.  This is possible in OpenSCAD using STL, but STL is a lossy format</li>
+<li><strong>Less Code and easier scripting</strong>  CadQuery scripts require less code to create most objects, because it is possible to locate
+features based on the position of other features, workplanes, vertices, etc.</li>
+<li><strong>Better Performance</strong>  CadQuery scripts can build STL, STEP, and AMF faster than OpenSCAD.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="where-does-the-name-cadquery-come-from">
+<h2>Where does the name CadQuery come from?<a class="headerlink" href="#where-does-the-name-cadquery-come-from" title="Permalink to this headline">¶</a></h2>
+<p>CadQuery is inspired by <a class="reference external" href="http://www.jquery.com">jQuery</a> , a popular framework that
+revolutionized web development involving javascript.</p>
+<p>CadQuery is for 3D CAD  what jQuery is for javascript.
+If you are familiar with how jQuery works, you will probably recognize several jQuery features that CadQuery uses:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A fluent api to create clean, easy to read code</li>
+<li>Ability to use the library along side other python libraries</li>
+<li>Clear and complete documentation, with plenty of samples.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installing CadQuery" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="CadQuery Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Parametric Products Intellectual Holdings LLC, All Rights Reserved.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
